@@ -1,0 +1,61 @@
+@startuml Forza 4
+class "Player" {
+    +Player()
+    +Player(nome)
+
+    +name
+    +isLogged
+}
+
+class "Game" {
+    +Game()
+
+    +Stato
+    +PlayGround
+    +Player1
+    +Player2
+    +Turn
+
+    +
+}
+
+class "PlayGround" {
+    +PlayGround()
+
+    +Pawns[]
+    +Colums
+    +Rows
+}
+
+class "Pawn" {
+    +Pawn()
+    +Pawn(color)
+
+    +Color
+    +PositionX
+    +PositionY
+}
+
+Class "Client" {
+    -port
+    -ip
+
+    +getPort()
+    +setPort()
+    +getIp()
+    +setiIp()
+}
+
+Class "Server" {
+    -port
+    -ip
+
+    +getPort()
+    +setPort()
+    +getIp()
+    +setiIp()
+}
+
+User -- Client
+User -- Server
+@enduml
