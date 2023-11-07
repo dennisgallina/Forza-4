@@ -1,9 +1,0 @@
-Server
- Classi:
-
-Client
- Classi:
-
-Client -> Server
-
-Client <- Server
