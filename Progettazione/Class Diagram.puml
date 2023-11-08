@@ -1,7 +1,14 @@
 @startuml Forza 4
+Class "ClientThread" {
+    +ClientThread()
+    +ClientThread(clientSocket)
+
+    -clientSocket
+}
+
 class "Player" {
     +Player()
-    +Player(nome)
+    +Player(name)
 
     +name
     +isLogged
@@ -10,11 +17,11 @@ class "Player" {
 class "Game" {
     +Game()
 
-    +Stato
-    +PlayGround
-    +Player1
-    +Player2
-    +Turn
+    +state
+    +playGround
+    +player1
+    +player2
+    +turn
 
     +
 }
@@ -22,18 +29,18 @@ class "Game" {
 class "PlayGround" {
     +PlayGround()
 
-    +Pawns[]
-    +Colums
-    +Rows
+    +pawns[]
+    +colums
+    +rows
 }
 
 class "Pawn" {
     +Pawn()
     +Pawn(color)
 
-    +Color
-    +PositionX
-    +PositionY
+    +color
+    +positionX
+    +positionY
 }
 
 Class "Client" {
