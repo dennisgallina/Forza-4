@@ -1,9 +1,9 @@
 @startuml Forza 4
-Class "ClientThread" {
-    +ClientThread()
-    +ClientThread(clientSocket)
+Class "ThreadClient" {
+    +ThreadClient()
+    +ThreadClient(clientSocket)
 
-    -clientSocket
+    -socketClient
 }
 
 class "Player" {
@@ -22,8 +22,6 @@ class "Game" {
     +player1
     +player2
     +turn
-
-    +
 }
 
 class "PlayGround" {
