@@ -34,30 +34,10 @@ class "PlayGround" {
 
 class "Pawn" {
     +Pawn()
-    +Pawn(color)
+    +Pawn(color, positionX, positionY)
 
     +color
     +positionX
     +positionY
-}
-
-Class "Client" {
-    -port
-    -ip
-
-    +getPort()
-    +setPort()
-    +getIp()
-    +setiIp()
-}
-
-Class "Server" {
-    -port
-    -ip
-
-    +getPort()
-    +setPort()
-    +getIp()
-    +setiIp()
 }
 @enduml
