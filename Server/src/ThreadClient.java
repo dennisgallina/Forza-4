@@ -2,6 +2,7 @@ import java.net.Socket;
 
 public class ThreadClient extends Thread {
     private Socket socketClient; // Socket inviata dal Client
+    private RichiestaDelClient richiestaDelClient;
 
     public ThreadClient() {
         this.socketClient = new Socket();
