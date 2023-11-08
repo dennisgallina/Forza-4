@@ -2,39 +2,118 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.border.LineBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 public class App {
+    private static Game game;
+    private static PlayGroundPanel playGroundPanel;
+    private static JPanel lobbyPanel;
+    private static JFrame frame; // Dichiarazione della finestra
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            createAndShowGUI();
+            createAndShowLobby();
         });
     }
 
-    private static void createAndShowGUI() {
-        JFrame frame = new JFrame("Forza 4");
+    private static void createAndShowLobby() {
+        // Creazione della finestra principale per il gioco
+        frame = new JFrame("Forza 4");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
-        Game game = new Game();
+        // Creazione di un pannello per la lobby
+        lobbyPanel = new LobbyWindow();
 
-        PlayGroundPanel playGroundPanel = new PlayGroundPanel(game.playGround);
-        frame.add(playGroundPanel, BorderLayout.CENTER);
+        // Aggiunta del pannello della lobby alla finestra
+        frame.add(lobbyPanel, BorderLayout.CENTER);
 
-        JButton playButton = new JButton("Start Game");
-        playButton.addActionListener(e -> startGame(game, playGroundPanel));
-        frame.add(playButton, BorderLayout.SOUTH);
+        // Impostazione delle dimensioni della finestra a
+        frame.setSize(500, 500);
 
-        // Ingrandisci la finestra impostando le dimensioni
-        frame.setSize(600, 800);
-
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        frame.setLocationRelativeTo(null); // Posizionamento della finestra al centro dello schermo
+        frame.setVisible(true); // Rendere la finestra visibile
     }
 
-    private static void startGame(Game game, PlayGroundPanel playGroundPanel) {
-        // Inizia il gioco e gestisci la logica qui
-        // Ad esempio, assegna i giocatori, imposta lo stato del gioco su "in corso", ecc.
+    private static void createAndShowGUI() {
+        // Creazione della finestra principale per il gioco
+        frame = new JFrame("Forza 4");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+
+        // Inizializzazione di un'istanza del gioco
+        game = new Game();
+
+        // Creazione del pannello del campo di gioco
+        playGroundPanel = new PlayGroundPanel(game.playGround);
+
+        // Aggiunta del pannello della lobby alla finestra
+        frame.add(lobbyPanel, BorderLayout.CENTER);
+
+        // Impostazione delle dimensioni della finestra a
+        frame.setSize(600, 800);
+
+        frame.setLocationRelativeTo(null); // Posizionamento della finestra al centro dello schermo
+        frame.setVisible(true); // Rendere la finestra visibile
+    }
+
+    // Questo metodo verrà chiamato quando il server trova una partita
+    public static void startGame() {
+        // Nascondi il pannello della lobby
+        lobbyPanel.setVisible(false);
+
+        // Aggiungi il pannello del campo di gioco alla finestra
+        frame.add(playGroundPanel, BorderLayout.CENTER);
+        frame.revalidate(); // Aggiornamento del layout della finestra
+    }
+}
+
+class LobbyWindow extends JPanel {
+    public LobbyWindow() {
+        // Crea un pulsante "Cerca Partita" nella lobby
+        JButton searchButton = new JButton("Cerca Partita");
+        
+        // Imposta l'aspetto personalizzato del pulsante
+        searchButton.setFont(new Font("Arial", Font.BOLD, 20));
+        searchButton.setBackground(new Color(0, 102, 204));
+        searchButton.setForeground(Color.WHITE);
+        searchButton.setFocusPainted(false);
+
+        // Crea un bordo arrotondato intorno al pulsante
+        int borderThickness = 2; // Spessore del bordo
+        int borderRadius = 15; // Raggio del bordo arrotondato
+        Border border = new CompoundBorder(
+            new LineBorder(new Color(0, 102, 204), borderThickness),
+            new EmptyBorder(borderRadius, borderThickness, borderRadius, borderThickness)
+        );
+        searchButton.setBorder(border);
+        
+        // Imposta le dimensioni del pulsante
+        searchButton.setPreferredSize(new Dimension(200, 100));
+        
+        // Imposta un layout per centrare il pulsante nella lobby
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 10, 10, 10); // Margine
+        add(searchButton, gbc);
+        
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                App.startGame();
+            }
+        });
     }
 }
 
@@ -46,6 +125,7 @@ class PlayGroundPanel extends JPanel {
         int columns = playGround.columns;
         int rows = playGround.rows;
 
+        // Utilizza un layout GridLayout per organizzare i pulsanti pedina in una griglia
         setLayout(new GridLayout(rows, columns));
 
         for (int row = 0; row < rows; row++) {
@@ -91,6 +171,8 @@ class PawnButton extends JButton {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setColor(getBackground());
+
+        // Disegna una forma ovale per rappresentare la pedina
         g.fillOval(10, 10, getWidth() - 20, getHeight() - 20);
     }
 }
