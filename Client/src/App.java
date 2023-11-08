@@ -41,7 +41,7 @@ class PlayGroundPanel extends JPanel {
 
     public PlayGroundPanel(PlayGround playGround) {
         this.pawns = playGround.pawns;
-        int columns = playGround.colums;
+        int columns = playGround.columns;
         int rows = playGround.rows;
 
         setLayout(new GridLayout(rows, columns));
