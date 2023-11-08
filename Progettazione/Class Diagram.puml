@@ -62,7 +62,4 @@ Class "Server" {
     +getIp()
     +setiIp()
 }
-
-User -- Client
-User -- Server
 @enduml
