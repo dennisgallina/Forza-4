@@ -21,11 +21,13 @@ public class App {
         PlayGroundPanel playGroundPanel = new PlayGroundPanel(game.playGround);
         frame.add(playGroundPanel, BorderLayout.CENTER);
 
-        JButton playButton = new JButton("Play");
+        JButton playButton = new JButton("Start Game");
         playButton.addActionListener(e -> startGame(game, playGroundPanel));
         frame.add(playButton, BorderLayout.SOUTH);
 
-        frame.pack();
+        // Ingrandisci la finestra impostando le dimensioni
+        frame.setSize(600, 800);
+
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
@@ -48,6 +50,7 @@ class PlayGroundPanel extends JPanel {
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
+                // Crea un pulsante pedina personalizzato con forma rotonda
                 PawnButton button = new PawnButton(row, col);
                 add(button);
             }
@@ -71,6 +74,10 @@ class PawnButton extends JButton {
         this.row = row;
         this.col = col;
 
+        // Imposta le dimensioni dei pulsanti pedina
+        setPreferredSize(new Dimension(70, 70));
+
+        // Crea un ascoltatore di eventi per gestire i clic sul pulsante
         addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -78,5 +85,12 @@ class PawnButton extends JButton {
                 // Ad esempio, aggiungi una pedina al giocatore corrente, ecc.
             }
         });
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.setColor(getBackground());
+        g.fillOval(10, 10, getWidth() - 20, getHeight() - 20);
     }
 }
