@@ -15,7 +15,7 @@ import java.util.List;
 
 public class App {
     private static Game game;
-    private static PlayGroundPanel playGroundPanel;
+    private static PlayGroundWindow playGroundPanel;
     private static JPanel lobbyPanel;
     private static JFrame frame; // Dichiarazione della finestra
 
@@ -44,7 +44,7 @@ public class App {
         frame.setVisible(true); // Rendere la finestra visibile
     }
 
-    private static void createAndShowGUI() {
+    private static void createAndShowGrid() {
         // Creazione della finestra principale per il gioco
         frame = new JFrame("Forza 4");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,7 +54,7 @@ public class App {
         game = new Game();
 
         // Creazione del pannello del campo di gioco
-        playGroundPanel = new PlayGroundPanel(game.playGround);
+        playGroundPanel = new PlayGroundWindow(game.playGround);
 
         // Aggiunta del pannello della lobby alla finestra
         frame.add(lobbyPanel, BorderLayout.CENTER);
@@ -70,6 +70,9 @@ public class App {
     public static void startGame() {
         // Nascondi il pannello della lobby
         lobbyPanel.setVisible(false);
+
+        // Mostra il campo da gioco
+        createAndShowGrid();
 
         // Aggiungi il pannello del campo di gioco alla finestra
         frame.add(playGroundPanel, BorderLayout.CENTER);
@@ -117,10 +120,10 @@ class LobbyWindow extends JPanel {
     }
 }
 
-class PlayGroundPanel extends JPanel {
+class PlayGroundWindow extends JPanel {
     private List<Pawn> pawns;
 
-    public PlayGroundPanel(PlayGround playGround) {
+    public PlayGroundWindow(PlayGround playGround) {
         this.pawns = playGround.pawns;
         int columns = playGround.columns;
         int rows = playGround.rows;
