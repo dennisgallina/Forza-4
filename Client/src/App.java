@@ -16,7 +16,7 @@ import java.util.List;
 public class App {
     private static Game game;
     private static PlayGroundWindow playGroundPanel;
-    private static JPanel lobbyPanel;
+    private static JPanel lobbyWindow;
     private static JFrame frame; // Dichiarazione della finestra
 
     public static void main(String[] args) {
@@ -32,10 +32,10 @@ public class App {
         frame.setLayout(new BorderLayout());
 
         // Creazione di un pannello per la lobby
-        lobbyPanel = new LobbyWindow();
+        lobbyWindow = new LobbyWindow();
 
         // Aggiunta del pannello della lobby alla finestra
-        frame.add(lobbyPanel, BorderLayout.CENTER);
+        frame.add(lobbyWindow, BorderLayout.CENTER);
 
         // Impostazione delle dimensioni della finestra a
         frame.setSize(500, 500);
@@ -57,7 +57,7 @@ public class App {
         playGroundPanel = new PlayGroundWindow(game.playGround);
 
         // Aggiunta del pannello della lobby alla finestra
-        frame.add(lobbyPanel, BorderLayout.CENTER);
+        frame.add(lobbyWindow, BorderLayout.CENTER);
 
         // Impostazione delle dimensioni della finestra a
         frame.setSize(600, 800);
@@ -69,7 +69,7 @@ public class App {
     // Questo metodo verrà chiamato quando il server trova una partita
     public static void startGame() {
         // Nascondi il pannello della lobby
-        lobbyPanel.setVisible(false);
+        lobbyWindow.setVisible(false);
 
         // Mostra il campo da gioco
         createAndShowGrid();

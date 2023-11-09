@@ -10,7 +10,7 @@ import org.xml.sax.SAXException;
 
 public class App {
     static ServerSocket socket; // Socket del Server
-    static RichiestaDelClient richiestaDelClient; // Gestione della Richiesta del Client in corso
+    static RichiestaDalClient richiestaDelClient; // Gestione della Richiesta del Client in corso
 
     public static void main(String[] args) throws Exception {
         socket = new ServerSocket(666);
@@ -28,7 +28,7 @@ public class App {
         DatagramPacket packetDalClient = new DatagramPacket(buff, buff.length);
         socket.accept(packetDalClient); // Ricezione di un pacchetto UDP
 
-        richiestaDelClient = new RichiestaDelClient(packetDalClient);
+        richiestaDelClient = new RichiestaDalClient(packetDalClient);
 
         return true;
     }

@@ -1,0 +1,9 @@
+Client -> Server
+play;
+insert;postionX
+finish;
+
+Client <- Server
+game - messaggio
+game - messaggio
+messaggio
