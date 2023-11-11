@@ -6,10 +6,12 @@ import java.net.Socket;
 
 public class ThreadClient extends Thread {
     private Socket socketClient; // Socket inviata dal Client
+    private Player player; // Player da gestire
     private RichiestaDalClient richiestaDalClient;
 
-    public ThreadClient(Socket socketClient) {
+    public ThreadClient(Socket socketClient, Player player) {
         this.socketClient = socketClient;
+        this.player = player;
     }
 
     public void run() {
@@ -19,9 +21,11 @@ public class ThreadClient extends Thread {
     
             String request;
             while ((request = in.readLine()) != null) {
-                richiestaDalClient = new RichiestaDalClient();
+                // Gestisce 
+                gestioneRisposta(new RichiestaDalClient(request));
     
-                String response = "Risposta al client"; // Sostituisci con la tua risposta
+                // Genera una risposta in base al comando e alla posizione
+                String response = "";
                 out.println(response);
             }
     
@@ -31,5 +35,11 @@ public class ThreadClient extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }    
+    }      
+
+    public void gestioneRisposta(RichiestaDalClient richiestaDalClient) {
+        if (richiestaDalClient.comando.equals("insert")) {
+            
+        }
+    }
 }

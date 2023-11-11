@@ -1,49 +1,29 @@
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.ServerSocket;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
-import org.xml.sax.SAXException;
+import java.net.Socket;
 
 public class App {
-    static ServerSocket socket; // Socket del Server
-    static RichiestaDalClient richiestaDelClient; // Gestione della Richiesta del Client in corso
-
     public static void main(String[] args) throws Exception {
-        socket = new ServerSocket(666);
+        Game game = new Game(); // Crea un'istanza della partita
+        ServerTCP server = new ServerTCP(666); // Crea un'istanza della classe ServerTCP
 
-        // In attesa di richieste
-        while (true) {
-            if (riceviDalClient()) // Riceve il pacchetto dal Client e lo inserisce in un oggetto RichiestaClient
-                gestioneRichiesta(); // Gestisce la richiesta ricevuta dal Client e si occupa di inviare al Client le risposte
+        // Attesa del primo giocatore
+        Socket connessionePlayer1 = null;
+        while (connessionePlayer1 == null) {
+            connessionePlayer1 = server.accettaConnessione(); // Accetta la prima connessione
         }
-    }
 
-    // Riceve un pacchetto dal Client e lo inserisce in un oggetto RichiestaClient
-    private static boolean riceviDalClient() throws IOException, ParserConfigurationException, SAXException, TransformerException {
-        byte[] buff = new byte[1500];
-        DatagramPacket packetDalClient = new DatagramPacket(buff, buff.length);
-        socket.accept(packetDalClient); // Ricezione di un pacchetto UDP
+        // Crea e avvia un nuovo ThreadClient per gestire la connessione
+        ThreadClient threadPlayer1 = new ThreadClient(connessionePlayer1, new Player("Nome del giocatore 1"));
+        game.player1 = threadPlayer1;
 
-        richiestaDelClient = new RichiestaDalClient(packetDalClient);
+        // Attesa del secondo giocatore
+        Socket connessionePlayer2 = null;
+        while (connessionePlayer2 == null) {
+            connessionePlayer2 = server.accettaConnessione(); // Accetta la seconda connessione
+        }
 
-        return true;
-    }
-
-    // Gestisce la richiesta ricevuta dal Client e si occupa di inviare al Client le risposte
-    private static void gestioneRichiesta() throws IOException, ParserConfigurationException, SAXException, TransformerException {
-        System.out.println(richiestaDelClient.ToShowConsole()); // Mostra in console la richiesta ricevuta dal client
-    } 
-
-    // Invia al Client un pacchetto
-    public static void inviaAlClient(byte[] datiBytes) throws IOException {
-        DatagramPacket rispostaAlClient = new DatagramPacket(datiBytes, datiBytes.length);
-        rispostaAlClient.setAddress(richiestaDelClient.ipClient);
-        rispostaAlClient.setPort(richiestaDelClient.portaClient);
-
-        socket.send(rispostaAlClient); // Invia un pacchetto UDP
+        // Crea e avvia un nuovo ThreadClient per gestire la connessione
+        ThreadClient threadPlayer2 = new ThreadClient(connessionePlayer2, new Player("Nome del giocatore 2"));
+        game.player2 = threadPlayer2;
+        game.player2 = threadPlayer2;
     }
 }
