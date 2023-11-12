@@ -12,8 +12,9 @@ public class App {
         }
 
         // Crea e avvia un nuovo ThreadClient per gestire la connessione
-        ThreadClient threadPlayer1 = new ThreadClient(connessionePlayer1, new Player("Nome del giocatore 1"));
+        ThreadClient threadPlayer1 = new ThreadClient(connessionePlayer1, new Player("Nome del giocatore 1", "red"), game);
         game.player1 = threadPlayer1;
+        threadPlayer1.start(); // Avvia il thread per il giocatore 1
 
         // Attesa del secondo giocatore
         Socket connessionePlayer2 = null;
@@ -22,8 +23,11 @@ public class App {
         }
 
         // Crea e avvia un nuovo ThreadClient per gestire la connessione
-        ThreadClient threadPlayer2 = new ThreadClient(connessionePlayer2, new Player("Nome del giocatore 2"));
+        ThreadClient threadPlayer2 = new ThreadClient(connessionePlayer2, new Player("Nome del giocatore 2", "yellow"), game);
         game.player2 = threadPlayer2;
-        game.player2 = threadPlayer2;
+        threadPlayer2.start(); // Avvia il thread per il giocatore 2
+
+        // Inizia il gioco
+        game.start();
     }
 }
