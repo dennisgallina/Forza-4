@@ -1,9 +1,8 @@
 Client -> Server
-play;
-insert;postionX
-finish;
+1. play;
+2. insert;postionX
+3. disconnect;
 
 Client <- Server
-game - messaggio
-game - messaggio
-messaggio
+2. invia una serie di numeri (esempio: 0;0;1;2;1;2): 0 -> cella vuota, 1 -> pedina rossa, 2 -> pedina gialla
+3. messaggio di conferma
