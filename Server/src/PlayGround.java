@@ -15,7 +15,7 @@ public class PlayGround {
     }
 
     // Inserisce la Pawn nel PlayGround
-    public boolean insert(String color, int positionXPawn) {
+    public synchronized boolean insert(String color, int positionXPawn) {
         if (isColumnFull(positionXPawn))
             return false;
 
