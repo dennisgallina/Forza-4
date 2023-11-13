@@ -7,7 +7,7 @@ public class Game extends Thread{
     public ThreadClient player2; // Giocatore 2
     public ThreadClient currentPlayer; // Giocatore corrente
 
-    public Game(ClientTCP tcp) {
+    public Game() {
         this.state = false;
         this.playGround = new PlayGround();
         this.player1 = null;
