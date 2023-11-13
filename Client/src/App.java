@@ -2,24 +2,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+
 import javax.swing.border.LineBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-
 public class App {
     private static Game game;
+    private static ClientTCP tcp;
     private static PlayGroundWindow playGroundPanel;
     private static JPanel lobbyWindow;
     private static JFrame frame; // Dichiarazione della finestra
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        tcp = new ClientTCP("nn",00);
+        game = new Game(tcp);
+
         SwingUtilities.invokeLater(() -> {
             createAndShowLobby();
         });
@@ -44,17 +44,14 @@ public class App {
         frame.setVisible(true); // Rendere la finestra visibile
     }
 
-    private static void createAndShowGrid() {
+    private static void createAndShowGrid(PlayGround playGround) {
         // Creazione della finestra principale per il gioco
         frame = new JFrame("Forza 4");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
-        // Inizializzazione di un'istanza del gioco
-        game = new Game();
-
         // Creazione del pannello del campo di gioco
-        playGroundPanel = new PlayGroundWindow(game.playGround);
+        playGroundPanel = new PlayGroundWindow(playGround);
 
         // Aggiunta del pannello della lobby alla finestra
         frame.add(lobbyWindow, BorderLayout.CENTER);
@@ -65,23 +62,10 @@ public class App {
         frame.setLocationRelativeTo(null); // Posizionamento della finestra al centro dello schermo
         frame.setVisible(true); // Rendere la finestra visibile
     }
-
-    // Questo metodo verrà chiamato quando il server trova una partita
-    public static void startGame() {
-        // Nascondi il pannello della lobby
-        lobbyWindow.setVisible(false);
-
-        // Mostra il campo da gioco
-        createAndShowGrid();
-
-        // Aggiungi il pannello del campo di gioco alla finestra
-        frame.add(playGroundPanel, BorderLayout.CENTER);
-        frame.revalidate(); // Aggiornamento del layout della finestra
-    }
 }
 
 class LobbyWindow extends JPanel {
-    public LobbyWindow() {
+    /*public LobbyWindow() {
         // Crea un pulsante "Cerca Partita" nella lobby
         JButton searchButton = new JButton("Cerca Partita");
         
@@ -117,14 +101,12 @@ class LobbyWindow extends JPanel {
                 App.startGame();
             }
         });
-    }
+    }*/
 }
 
 class PlayGroundWindow extends JPanel {
-    private List<Pawn> pawns;
 
     public PlayGroundWindow(PlayGround playGround) {
-        this.pawns = playGround.pawns;
         int columns = playGround.columns;
         int rows = playGround.rows;
 
