@@ -29,6 +29,8 @@ public class ClientTCP {
     }
 
     public void chiudi() throws IOException {
+        ip = ""; 
+        porta = -1;
         in.close();
         out.close();
         socket.close();
