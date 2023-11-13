@@ -4,5 +4,5 @@ Client -> Server
 3. disconnect
 
 Client <- Server
-2. invia una serie di numeri (esempio: 0;0;1;2;1;2): 0 -> cella vuota, 1 -> pedina rossa, 2 -> pedina gialla
+2. invia una serie di numeri (esempio: 0;0;1;2;1;2): 0 -> cella vuota, 1 -> pedina rossa, 2 -> pedina gialla;esito della vincita (esempio: red): null -> non ha vinto nessuno, player 1 -> ha vinto red, player 2 -> ha vinto yellow
 3. messaggio di conferma
