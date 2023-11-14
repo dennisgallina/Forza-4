@@ -1,53 +1,40 @@
 import java.io.IOException;
 
 public class Game {
-    public boolean state; // Stato della partita: true -> in corso; false -> non in corso
     public PlayGround playGround; // Griglia di gioco
-    public Player player1; // Giocatore 1
-    public Player player2; // Giocatore 2
-    public char turn; // Turno di quale giocatore
-    public ClientTCP tcp;
+    public ClientTCP clientTCP;
 
-    public Game(ClientTCP c) {
-        this.state = false;
+    public Game(ClientTCP clientTCP) {
         this.playGround = new PlayGround();
-        this.player1 = null;
-        this.player2 = null;
-        this.turn = '0';
-        this.tcp = c;
+        this.clientTCP = clientTCP;
     }
 
     public void getGameDaServer() throws IOException
     {
         while(true)
         {
-            String str = tcp.ricevi();
-            String[] vett = str.split(";");
+            String[] data = clientTCP.data.split(";");
 
-            if(vett[vett.length].equals(player1.name))
+            if(data[data.length].equals(player1.name))
             {
-                putPawns(vett);
+                insertPawns(data);
                 
-                tcp.chiudi();
+                tcp.close();
                 playGround.fine();
-                player1 = new Player();
-                player1 = new Player();
             }
-            else if(vett[vett.length].equals(player2.name))
+            else if(data[data.length].equals(player2.name))
             {
-                putPawns(vett);
-                tcp.chiudi();
+                insertPawns(data);
+                tcp.close();
                 playGround.fine();
-                player1 = new Player();
-                player1 = new Player();
             }
             else{
-                putPawns(vett);
+                insertPawns(data);
             }
         }
     }
 
-    public void putPawns(String[] vett)
+    public void insertPawns(String[] vett)
     {
         int k = 0;
         for(int y = 1; y < playGround.rows; y++)
