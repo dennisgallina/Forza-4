@@ -1,11 +1,12 @@
 import java.io.IOException;
 
 public class Game extends Thread{
+    public ServerTCP serverTCP; // Server su cui è situata la partita
     public boolean state; // Stato della partita: true -> in corso; false -> non in corso
     public PlayGround playGround; // Griglia di gioco
-    public ThreadClient player1; // Giocatore 1
-    public ThreadClient player2; // Giocatore 2
-    public ThreadClient currentPlayer; // Giocatore corrente
+    public Client player1; // Giocatore 1
+    public Client player2; // Giocatore 2
+    public Client currentPlayer; // Giocatore corrente
 
     public Game() {
         this.state = false;
@@ -15,7 +16,7 @@ public class Game extends Thread{
         this.currentPlayer = null;
     }
 
-    public Game(ThreadClient player1, ThreadClient player2) {
+    public Game(Client player1, Client player2) {
         this.state = false;
         this.playGround = new PlayGround();
         this.player1 = player1;
@@ -28,10 +29,9 @@ public class Game extends Thread{
         player1.start(); // Avvia il thread per il giocatore 1
         player2.start(); // Avvia il thread per il giocatore 2
     
-        // Invia lo stato del gioco a entrambi i client
+        // Invia lo stato del gioco a tutti i client
         try {
-            player1.send(playGround.getGamePlayGround());
-            player2.send(playGround.getGamePlayGround());
+            serverTCP.sendAtAll(playGround.getGamePlayGround());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,17 +61,16 @@ public class Game extends Thread{
             else if (playGround.checkWin().equals("yellow"))
                 vincitore = player2.player.name;
             
-            // Invia lo stato del gioco a entrambi i client
-            player1.send(playGround.getGamePlayGround() + ";" + vincitore);
-            player2.send(playGround.getGamePlayGround() + ";" + vincitore);
+            // Invia lo stato del gioco a tutti i client
+            serverTCP.sendAtAll(playGround.getGamePlayGround() + ";" + vincitore);
         }
         else if (clientRequest.command.equals("disconnect")) { // Se richiede di disconnettersi
             currentPlayer.socketClient.close(); // Disconnette il giocatore
             // Invia l'attesa all'altro giocatore
             if (currentPlayer.equals(player1))
-                player2.send("finish");
+                serverTCP.send("finish", player2.socketClient);
             else if (currentPlayer.equals(player2))
-                player1.send("finish");
+                serverTCP.send("finish", player1.socketClient);
 
             this.state = false;
             return;
