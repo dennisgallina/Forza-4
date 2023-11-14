@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -18,6 +19,19 @@ public class ServerTCP {
         connectionsManager.addConnection(socket);
         return socket;
     }
+
+    // Invia un messaggio a un client specifico
+    public void send(String message, Socket connection) throws IOException {
+        PrintWriter out = new PrintWriter(connection.getOutputStream(), true); // Crea un PrintWriter per inviare dati al client
+        out.println(message);  // Invia il messaggio al client
+    }
+
+    // Invia un messaggio a tutti i client
+    public void sendAtAll(String message) throws IOException {
+        for (Socket connection : connectionsManager.connections ) 
+            send(message, connection);
+    }
+
 
     // Chiude le connessioni e il Server
     public void close() throws IOException {
