@@ -10,7 +10,7 @@ public class App {
         while (connectionPlayer1 == null) 
             connectionPlayer1 = server.acceptConnection();
         
-        Client player1 = new Client(connectionPlayer1, new Player("Player 1", "red"));
+        Player player1 = new Player("Player 1", "red", connectionPlayer1); // Creazione del Player 1
         server.send("wait", connectionPlayer1); // Tiene il giocatore in attesa fino alla connessione dell'avversario
 
         // Attesa del secondo giocatore
@@ -18,7 +18,7 @@ public class App {
         while (connectionPlayer2 == null) 
             connectionPlayer2 = server.acceptConnection();
         
-        Client player2 = new Client(connectionPlayer2, new Player("Player 2", "yellow"));
+        Player player2 = new Player("Player 2", "yellow", connectionPlayer2); // Creazione del Player 2
 
         Game game = new Game(player1, player2); // Crea un'istanza della partita
         game.start(); // Inizia la partita

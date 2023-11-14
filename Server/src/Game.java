@@ -4,9 +4,9 @@ public class Game extends Thread{
     public ServerTCP serverTCP; // Server su cui è situata la partita
     public boolean state; // Stato della partita: true -> in corso; false -> non in corso
     public PlayGround playGround; // Griglia di gioco
-    public Client player1; // Giocatore 1
-    public Client player2; // Giocatore 2
-    public Client currentPlayer; // Giocatore corrente
+    public Player player1; // Giocatore 1
+    public Player player2; // Giocatore 2
+    public Player currentPlayer; // Giocatore corrente
 
     public Game() {
         this.state = false;
@@ -16,7 +16,7 @@ public class Game extends Thread{
         this.currentPlayer = null;
     }
 
-    public Game(Client player1, Client player2) {
+    public Game(Player player1, Player player2) {
         this.state = false;
         this.playGround = new PlayGround();
         this.player1 = player1;
@@ -52,25 +52,25 @@ public class Game extends Thread{
 
     private void manageRequest(ClientRequest clientRequest) throws IOException {
         if (clientRequest.command.equals("insert")) {// Se richiede di inserire una Pawn
-            playGround.insert(currentPlayer.player.color, clientRequest.positionX); // Inserisce la Pawn
+            playGround.insert(currentPlayer.pawnsColor, clientRequest.positionX); // Inserisce la Pawn
 
             String vincitore = null;
             if (playGround.checkWin() == null) {}
             else if (playGround.checkWin().equals("red")) 
-                vincitore = player1.player.name;
+                vincitore = player1.name;
             else if (playGround.checkWin().equals("yellow"))
-                vincitore = player2.player.name;
+                vincitore = player2.name;
             
             // Invia lo stato del gioco a tutti i client
             serverTCP.sendAtAll(playGround.getGamePlayGround() + ";" + vincitore);
         }
         else if (clientRequest.command.equals("disconnect")) { // Se richiede di disconnettersi
-            currentPlayer.socketClient.close(); // Disconnette il giocatore
+            currentPlayer.connection.close(); // Disconnette il giocatore
             // Invia l'attesa all'altro giocatore
             if (currentPlayer.equals(player1))
-                serverTCP.send("finish", player2.socketClient);
+                serverTCP.send("finish", player2.connection);
             else if (currentPlayer.equals(player2))
-                serverTCP.send("finish", player1.socketClient);
+                serverTCP.send("finish", player1.connection);
 
             this.state = false;
             return;
