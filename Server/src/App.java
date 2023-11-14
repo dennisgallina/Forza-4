@@ -6,19 +6,19 @@ public class App {
         ServerTCP server = new ServerTCP(666); // Crea un'istanza della classe ServerTCP
 
         // Attesa del primo giocatore
-        Socket player1Socket = server.acceptConnection();
-        while (player1Socket == null) 
-            player1Socket = server.acceptConnection();
+        Socket connectionPlayer1 = server.acceptConnection();
+        while (connectionPlayer1 == null) 
+            connectionPlayer1 = server.acceptConnection();
         
-        Client player1 = new Client(player1Socket, new Player("Player 1", "red"));
-        server.send("wait", player1Socket); // Tiene il giocatore in attesa fino alla connessione dell'avversario
+        Client player1 = new Client(connectionPlayer1, new Player("Player 1", "red"));
+        server.send("wait", connectionPlayer1); // Tiene il giocatore in attesa fino alla connessione dell'avversario
 
         // Attesa del secondo giocatore
-        Socket player2Socket = server.acceptConnection();
-        while (player2Socket == null) 
-            player2Socket = server.acceptConnection();
+        Socket connectionPlayer2 = server.acceptConnection();
+        while (connectionPlayer2 == null) 
+            connectionPlayer2 = server.acceptConnection();
         
-        Client player2 = new Client(player2Socket, new Player("Player 2", "yellow"));
+        Client player2 = new Client(connectionPlayer2, new Player("Player 2", "yellow"));
 
         Game game = new Game(player1, player2); // Crea un'istanza della partita
         game.start(); // Inizia la partita
