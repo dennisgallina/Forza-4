@@ -10,17 +10,17 @@ public class App {
         while (player1Socket == null) 
             player1Socket = server.acceptConnection();
         
-        ThreadClient threadPlayer1 = new ThreadClient(player1Socket, new Player("Player 1", "red"));
-        threadPlayer1.send("wait"); // Tiene il giocatore in attesa fino alla connessione dell'avversario
+        Client player1 = new Client(player1Socket, new Player("Player 1", "red"));
+        server.send("wait", player1Socket); // Tiene il giocatore in attesa fino alla connessione dell'avversario
 
         // Attesa del secondo giocatore
         Socket player2Socket = server.acceptConnection();
         while (player2Socket == null) 
             player2Socket = server.acceptConnection();
         
-        ThreadClient threadPlayer2 = new ThreadClient(player2Socket, new Player("Player 2", "yellow"));
+        Client player2 = new Client(player2Socket, new Player("Player 2", "yellow"));
 
-        Game game = new Game(threadPlayer1, threadPlayer2); // Crea un'istanza della partita
+        Game game = new Game(player1, player2); // Crea un'istanza della partita
         game.start(); // Inizia la partita
 
         while (game.isAlive()) {}
