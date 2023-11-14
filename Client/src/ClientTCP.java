@@ -4,33 +4,40 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ClientTCP {
+public class ClientTCP extends Thread{
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
     private String ip;
-    private int porta;
+    private int port;
+    public String data;
 
     public ClientTCP(String ip, int porta) throws IOException {
         this.ip = ip;
-        this.porta = porta;
+        this.port = porta;
         this.socket = new Socket(ip, porta);
         this.out = new PrintWriter(socket.getOutputStream(), true);
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
-    public void invia(String data) throws IOException {
+    public void run() {
+        while (!socket.isClosed()) {
+            try {
+                data = in.readLine();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    } 
+
+    public void send(String data) throws IOException {
         out.println(data);
     }
 
-    public String ricevi() throws IOException {
-        String response = in.readLine();
-        return response;
-    }
-
-    public void chiudi() throws IOException {
+    public void close() throws IOException {
         ip = ""; 
-        porta = -1;
+        port = -1;
         in.close();
         out.close();
         socket.close();
