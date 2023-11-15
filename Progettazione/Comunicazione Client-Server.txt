@@ -1,9 +1,9 @@
 Client -> Server
-1. play
 2. insert;postionX
 3. disconnect
 
 Client <- Server
+1. start
 2. invia una serie di numeri (esempio: 0;0;1;2;1;2): 0 -> cella vuota, 1 -> pedina rossa, 2 -> pedina gialla;esito della vincita (esempio: red): null -> non ha vinto nessuno, player 1 -> ha vinto red, player 2 -> ha vinto yellow
 3. messaggio di conferma
 4. wait (lascia in attesa il giocatore nel frattempo in cui viene cercato l'avversario)
