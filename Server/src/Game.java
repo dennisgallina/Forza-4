@@ -8,14 +8,6 @@ public class Game extends Thread{
     public Player player2; // Giocatore 2
     public Player currentPlayer; // Giocatore corrente
 
-    public Game() {
-        this.state = false;
-        this.playGround = new PlayGround();
-        this.player1 = null;
-        this.player2 = null;
-        this.currentPlayer = null;
-    }
-
     public Game(Player player1, Player player2) {
         this.state = false;
         this.playGround = new PlayGround();

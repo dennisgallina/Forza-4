@@ -83,8 +83,8 @@ public class PlayGround {
             if (pawn.positionX == posX && pawn.positionY == posY)
                 return pawn;
         }
-        // Se non trova una pedina in questa posizione, restituisce una pedina vuota
-        return new Pawn();
+        
+        return null;
     }
 
     // Restituisce una stringa rappresentante lo stato attuale del campo da gioco
