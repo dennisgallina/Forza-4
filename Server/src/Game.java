@@ -23,6 +23,7 @@ public class Game extends Thread{
     
         // Invia lo stato del gioco a tutti i client
         try {
+            serverTCP.sendAtAll("start");
             serverTCP.sendAtAll(playGround.getGamePlayGround());
         } catch (IOException e) {
             e.printStackTrace();
