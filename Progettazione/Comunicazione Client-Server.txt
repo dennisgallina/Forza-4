@@ -1,9 +1,12 @@
 Client -> Server
-2. insert;postionX
-3. disconnect
+3. insert;postionX
+4. disconnect
+6. comando inesistente
 
 Client <- Server
-1. start
-2. invia una serie di numeri (esempio: 0;0;1;2;1;2): 0 -> cella vuota, 1 -> pedina rossa, 2 -> pedina gialla;esito della vincita (esempio: red): null -> non ha vinto nessuno, player 1 -> ha vinto red, player 2 -> ha vinto yellow
-3. messaggio di conferma
-4. wait (lascia in attesa il giocatore nel frattempo in cui viene cercato l'avversario)
+1. wait 
+2. start
+3. refresh;invia una serie di numeri (esempio: 0;0;1;2;1;2): 0 -> cella vuota, 1 -> pedina rossa, 2 -> pedina gialla;
+4. finish
+5. winner;esito della vincita (esempio: red): null -> non ha vinto nessuno, player 1 -> ha vinto red, player 2 -> ha vinto yellow
+6. command not recognized
