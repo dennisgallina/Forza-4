@@ -51,31 +51,35 @@ public class Game extends Thread{
     } 
 
     private void manageRequest(ClientRequest clientRequest) throws IOException {
-        if (clientRequest.command.equals("insert")) {// Se richiede di inserire una Pawn
-            playGround.insert(currentPlayer.pawnsColor, clientRequest.positionX); // Inserisce la Pawn
+        switch (clientRequest.command) {
+            case "insert":
+                playGround.insert(currentPlayer.pawnsColor, clientRequest.positionX); // Inserisce la Pawn
 
-            String vincitore = null;
-            if (playGround.checkWin() == null) {}
-            else if (playGround.checkWin().equals("red")) 
-                vincitore = player1.name;
-            else if (playGround.checkWin().equals("yellow"))
-                vincitore = player2.name;
-            
-            // Invia lo stato del gioco a tutti i client
-            serverTCP.sendAtAll(playGround.getGamePlayGround() + ";" + vincitore);
-        }
-        else if (clientRequest.command.equals("disconnect")) { // Se richiede di disconnettersi
-            currentPlayer.connection.close(); // Disconnette il giocatore
-            // Invia l'attesa all'altro giocatore
-            if (currentPlayer.equals(player1))
-                serverTCP.send("finish", player2.connection);
-            else if (currentPlayer.equals(player2))
-                serverTCP.send("finish", player1.connection);
+                String vincitore = null;
+                if (playGround.checkWin() == null) {}
+                else if (playGround.checkWin().equals("red")) 
+                    vincitore = player1.name;
+                else if (playGround.checkWin().equals("yellow"))
+                    vincitore = player2.name;
+                
+                serverTCP.sendAtAll(playGround.getGamePlayGround() + ";" + vincitore); // Invia lo stato del gioco a tutti i client
+                currentPlayer = (currentPlayer == player1) ? player2 : player1; // Cambia turno
+                break;
 
-            this.state = false;
-            return;
+            case "disconnect":
+                currentPlayer.connection.close(); // Disconnette il giocatore
+                // Invia l'attesa all'altro giocatore
+                if (currentPlayer.equals(player1))
+                    serverTCP.send("finish", player2.connection);
+                else if (currentPlayer.equals(player2))
+                    serverTCP.send("finish", player1.connection);
+
+                this.state = false;
+                break;
+
+            default:
+                serverTCP.send("command not recognized", currentPlayer.connection);
+                break;
         }
-        
-        currentPlayer = (currentPlayer == player1) ? player2 : player1; // Cambia turno
     }    
 }
