@@ -36,8 +36,6 @@ public class ClientTCP extends Thread{
     }
 
     public void close() throws IOException {
-        ip = ""; 
-        port = -1;
         in.close();
         out.close();
         socket.close();
