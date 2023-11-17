@@ -10,7 +10,7 @@ public class ConnectionsManager {
         connections = new ArrayList<>();
     }
 
-    public boolean addConnection(Socket socket) {
+    public boolean add(Socket socket) {
         for (Socket connection : connections) {
             if (connection.equals(socket))
                 return false;

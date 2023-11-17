@@ -12,13 +12,11 @@ public class PlayGround {
         this.rows = 7;
     }
 
-    public void insert(Pawn pawn)
-    {
+    public void insert(Pawn pawn) {
         pawns.add(pawn);
     }
 
-    public void clear()
-    {
+    public void clear() {
         pawns.clear();
     }
 }

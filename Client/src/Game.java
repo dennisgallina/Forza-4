@@ -13,41 +13,15 @@ public class Game {
 
     public void manageDataFromServer() throws IOException
     {
-        //creao la schermata iniziale
-        graphic.createLobby();
-        //controllo che il pulsante sia premuto e finche non preme resto nella lobby
-        boolean prem = false;
-        do {
-            prem = graphic.isButtonConnectPressed();
-        } while (!prem);
-        //appena ha premuto starto la comunicazione 
-        clientTCP.start();
-        //leggo la risposta
         while (true)
         {
             String[] dataFromServer = clientTCP.data.split(";"); // Dati ricevuti dal Server
-            switch (dataFromServer[0]) {
-                case "wait":
-                    graphic.createWaitingScreen();
-                    break;
-                case "start":
-                    graphic.createCamp(playGround.rows, playGround.columns);
-                    break;
-                case "refresh":
 
-                    break;
-                case "finish":
-                    graphic.Disconnect();
-                    clientTCP.close();
-                    break;
-                case "winner":
-                    graphic.WinnerScreenCreator();
-                    clientTCP.close();
-                    break;
-                default:
-                    graphic.messagError();
-                    break;
-            }
+            // Gestione della risposta del Server
+            if (dataFromServer[0].equals("wait")) { // Se il Server invia il comando di attesa
+                // Gestisce l'attesa della connessione per l'altro avversario
+            } else {
+                // Divisione dei dati in Pawns e Winner
                 String[] pawns;
                 String winner = "";
                 if (!dataFromServer[dataFromServer.length].equals("0") && !dataFromServer[dataFromServer.length].equals("1") && !dataFromServer[dataFromServer.length].equals("2")) {
@@ -61,6 +35,7 @@ public class Game {
 
                 if (winner.equals("Player 1") || winner.equals("Player 2")) 
                     clientTCP.close();
+            }
         }
        }
 
@@ -75,7 +50,6 @@ public class Game {
                     playGround.insert(new Pawn("red", column, row)); // Inserimento Pawn red
                 } else if (pawns[countPawns].equals("2"))
                     playGround.insert(new Pawn("yellow", column, row)); // Inserimento Pawn yellow
-
             }
         }
     }

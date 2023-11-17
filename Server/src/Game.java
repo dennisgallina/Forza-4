@@ -21,10 +21,10 @@ public class Game extends Thread{
         player1.start(); // Avvia il thread per il giocatore 1
         player2.start(); // Avvia il thread per il giocatore 2
     
-        // Invia lo stato del gioco a tutti i client
         try {
+            // Invia lo stato del gioco a tutti i client
             serverTCP.sendAtAll("start");
-            serverTCP.sendAtAll(playGround.getGamePlayGround());
+            serverTCP.sendAtAll(playGround.getPawns());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,38 +39,40 @@ public class Game extends Thread{
             }
         }
 
-        this.state = false;
+        this.state = false; // Finisce la partita
         return;
     } 
 
+    // Gestione del comando richisto
     private void manageRequest(ClientRequest clientRequest) throws IOException {
         switch (clientRequest.command) {
-            case "insert":
+            case "insert": // Richiede l'inserimento di una Pawn
                 playGround.insert(currentPlayer.pawnsColor, clientRequest.positionX); // Inserisce la Pawn
+                serverTCP.sendAtAll(playGround.getPawns()); // Comunica lo stato del gioco a tutti i client
 
-                String vincitore = null;
+                // Verifica se c'è un vincitore
                 if (playGround.checkWin() == null) {}
                 else if (playGround.checkWin().equals("red")) 
-                    vincitore = player1.name;
+                    serverTCP.sendAtAll("winner;red"); // Comunica il vincitore a tutti i client
                 else if (playGround.checkWin().equals("yellow"))
-                    vincitore = player2.name;
+                    serverTCP.sendAtAll("winner;yellow"); // Comunica il vincitore a tutti i client
                 
-                serverTCP.sendAtAll(playGround.getGamePlayGround() + ";" + vincitore); // Invia lo stato del gioco a tutti i client
                 currentPlayer = (currentPlayer == player1) ? player2 : player1; // Cambia turno
                 break;
 
-            case "disconnect":
+            case "disconnect": // Richiede la disconnessione
                 currentPlayer.connection.close(); // Disconnette il giocatore
-                // Invia l'attesa all'altro giocatore
+
+                // Comunica la disconnessione all'altro giocatore
                 if (currentPlayer.equals(player1))
                     serverTCP.send("finish", player2.connection);
                 else if (currentPlayer.equals(player2))
                     serverTCP.send("finish", player1.connection);
 
-                this.state = false;
+                this.state = false; // Finisce la partita
                 break;
 
-            default:
+            default: // Richiede un comando inesistente
                 serverTCP.send("command not recognized", currentPlayer.connection);
                 break;
         }

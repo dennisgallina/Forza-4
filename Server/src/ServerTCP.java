@@ -16,7 +16,8 @@ public class ServerTCP {
     public Socket acceptConnection() throws IOException {
         // Accetta una connessione dal client e la restituisce
         Socket socket = serverSocket.accept();
-        connectionsManager.addConnection(socket);
+        if (connectionsManager.add(socket));
+            send("connection accepted", socket);
         return socket;
     }
 
