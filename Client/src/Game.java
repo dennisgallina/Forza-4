@@ -4,11 +4,13 @@ public class Game {
     public Graphic graphic;
     public PlayGround playGround; // Griglia di gioco
     public ClientTCP clientTCP; // Comunicazione col Server
+    public RequestAtServer req;
 
     public Game() throws IOException {
         this.playGround = new PlayGround();
         this.clientTCP = new ClientTCP("null", 0);
         this.graphic = new Graphic();
+        this.req = new RequestAtServer();
     }
 
     public void manageDataFromServer() throws IOException
@@ -18,50 +20,37 @@ public class Game {
         do{
             prem = graphic.isButtonConnectPressed();
         } while(!prem);
-        clientTCP.start();
+        req.sendAtServer("", clientTCP, 0);
         while (true)
         {
+            if(prem = graphic.isButtonDiconnectPressed())
+                req.sendAtServer("disconnect", clientTCP, 0);
+            
             String[] dataFromServer = clientTCP.data.split(";"); // Dati ricevuti dal Server
             switch (dataFromServer[0]) {
                 case "wait":
                     graphic.createWaitingScreen();
                     break;
                 case "start":
-                graphic.createCamp(playGround.rows, playGround.columns);
+                    graphic.createCamp(playGround.rows, playGround.columns);
                     break;
                 case "refresh":
+                    insertPawns(dataFromServer);
+                    
                     break;
                 case "finish":
                     graphic.Disconnect();
                     break;
                 case "winner":
                     graphic.WinnerScreenCreator();
+                    clientTCP.close();
                     break;
                 default:
                 graphic.messagError();
                     break;
             }
-            // Gestione della risposta del Server
-            if (dataFromServer[0].equals("wait")) { // Se il Server invia il comando di attesa
-                // Gestisce l'attesa della connessione per l'altro avversario
-            } else {
-                // Divisione dei dati in Pawns e Winner
-                String[] pawns;
-                String winner = "";
-                if (!dataFromServer[dataFromServer.length].equals("0") && !dataFromServer[dataFromServer.length].equals("1") && !dataFromServer[dataFromServer.length].equals("2")) {
-                    pawns = dataFromServer;
-                    pawns[pawns.length] = null;
-                    winner = dataFromServer[dataFromServer.length];
-                } else
-                    pawns = dataFromServer;
-
-                insertPawns(pawns);
-
-                if (winner.equals("Player 1") || winner.equals("Player 2")) 
-                    clientTCP.close();
-            }
         }
-       }
+    }
 
     // Inserisce le Pawns ricevute dal Server: 0 -> Pawn non presente, 1 -> Pawn red, 2 -> Pawn yellow
     public void insertPawns(String[] pawns)
