@@ -88,7 +88,7 @@ public class PlayGround {
     }
 
     // Restituisce una stringa rappresentante lo stato attuale del campo da gioco
-    public String getGamePlayGround() {
+    public String getPawns() {
         // Crea un StringBuilder per costruire la stringa
         StringBuilder sb = new StringBuilder();
         // Scorre le righe del campo da gioco dal basso verso l'alto
