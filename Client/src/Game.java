@@ -9,30 +9,45 @@ public class Game {
         this.clientTCP = clientTCP;
     }
 
-    public void manageDataFromServer() throws IOException
-    {
-        while (true)
-        {
-            String[] dataFromServer = clientTCP.data.split(";"); // Dati ricevuti dal Server
+    public void manageResponse() throws IOException {
+        while (true) {
+            String[] serverResponse = clientTCP.data.split(";"); // Dati ricevuti dal Server
+            String command = serverResponse[0];
 
             // Gestione della risposta del Server
-            if (dataFromServer[0].equals("wait")) { // Se il Server invia il comando di attesa
-                // Gestisce l'attesa della connessione per l'altro avversario
-            } else {
-                // Divisione dei dati in Pawns e Winner
-                String[] pawns;
-                String winner = "";
-                if (!dataFromServer[dataFromServer.length].equals("0") && !dataFromServer[dataFromServer.length].equals("1") && !dataFromServer[dataFromServer.length].equals("2")) {
-                    pawns = dataFromServer;
-                    pawns[pawns.length] = null;
-                    winner = dataFromServer[dataFromServer.length];
-                } else
-                    pawns = dataFromServer;
+            switch (command) {
+                case "connection accepted":
+                    // Gestisce la connessione accettata
+                    break;
 
-                insertPawns(pawns);
+                case "wait":
+                    // Gestisce l'attesa della connessione per l'altro avversario
+                    break;
 
-                if (winner.equals("Player 1") || winner.equals("Player 2")) 
-                    clientTCP.close();
+                case "start":
+                    // Gestisce l'inizio della partita
+                    break;
+
+                case "refresh":
+                    // Gestisce il refresh del campo
+                    String[] pawns = serverResponse[1].split(",");
+                    insertPawns(pawns);
+                    break;
+
+                case "finish":
+                    // Gestisce la disconnessione dell'avversario
+                    break;
+
+                case "winner":
+                    // Gestisce la vittoria di uno dei due giocatori
+                    break;
+
+                case "command not recognized":
+                    // Gestisce un comando non riconosciuto
+                    break;
+            
+                default:
+                    break;
             }
         }
     }
@@ -48,7 +63,6 @@ public class Game {
                     playGround.insert(new Pawn("red", column, row)); // Inserimento Pawn red
                 } else if (pawns[countPawns].equals("2"))
                     playGround.insert(new Pawn("yellow", column, row)); // Inserimento Pawn yellow
-
             }
         }
     }
