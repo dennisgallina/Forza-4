@@ -13,10 +13,34 @@ public class Game {
 
     public void manageDataFromServer() throws IOException
     {
+        boolean prem = false;
+        graphic.createLobby();
+        do{
+            prem = graphic.isButtonConnectPressed();
+        } while(!prem);
+        clientTCP.start();
         while (true)
         {
             String[] dataFromServer = clientTCP.data.split(";"); // Dati ricevuti dal Server
-
+            switch (dataFromServer[0]) {
+                case "wait":
+                    graphic.createWaitingScreen();
+                    break;
+                case "start":
+                graphic.createCamp(playGround.rows, playGround.columns);
+                    break;
+                case "refresh":
+                    break;
+                case "finish":
+                    graphic.Disconnect();
+                    break;
+                case "winner":
+                    graphic.WinnerScreenCreator();
+                    break;
+                default:
+                graphic.messagError();
+                    break;
+            }
             // Gestione della risposta del Server
             if (dataFromServer[0].equals("wait")) { // Se il Server invia il comando di attesa
                 // Gestisce l'attesa della connessione per l'altro avversario
