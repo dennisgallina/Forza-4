@@ -5,25 +5,22 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ClientTCP extends Thread{
-    private Socket socket;
-    private PrintWriter out;
-    private BufferedReader in;
-    private String ip;
-    private int port;
-    public String data;
+    private Socket socket; // Connessione del Client
+    private BufferedReader input; // Ricezione Dati
+    private PrintWriter output; // Invio Dati
+    public String serverResponse; // Risposta ricevuta dal Server
 
-    public ClientTCP(String ip, int porta) throws IOException {
-        this.ip = ip;
-        this.port = porta;
-        this.socket = new Socket(ip, porta);
-        this.out = new PrintWriter(socket.getOutputStream(), true);
-        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    public ClientTCP(String serverIp, int serverPort) throws IOException {
+        this.socket = new Socket(serverIp, serverPort);
+        this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.output = new PrintWriter(socket.getOutputStream(), true);
     }
 
     public void run() {
+        // Resta in ascolto del Server finché la Connessione non viene chiusa
         while (!socket.isClosed()) {
             try {
-                data = in.readLine();
+                serverResponse = input.readLine(); // Riceve dati dal Server
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -31,13 +28,15 @@ public class ClientTCP extends Thread{
         }
     } 
 
+    // Invia dei dati al Server
     public void send(String data) throws IOException {
-        out.println(data);
+        output.println(data);
     }
 
+    // Chiude la Connessione col Server
     public void close() throws IOException {
-        in.close();
-        out.close();
+        input.close();
+        output.close();
         socket.close();
     }
 }
