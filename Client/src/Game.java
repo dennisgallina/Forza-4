@@ -1,29 +1,28 @@
 import java.io.IOException;
 
 public class Game extends Thread {
-    public Graphic graphic;
+    public boolean state; // Stato della partita: true -> game in corso, false -> game non iniziato/finito
+    public Graphic graphic; // Grafica della partita
     public PlayGround playGround; // Griglia di gioco
     public ClientTCP clientTCP; // Comunicazione col Server
     public RequestAtServer requestAtServer; // Richiesta al Server
 
-    public Game() throws IOException {
+    public Game(Graphic graphic, ClientTCP clientTCP) throws IOException {
+        this.state = false;
+        this.graphic = graphic;
         this.playGround = new PlayGround();
-        this.clientTCP = new ClientTCP("null", 0);
-        this.graphic = new Graphic();
+        this.clientTCP = clientTCP;
         this.requestAtServer = new RequestAtServer();
     }
 
     public void run() {
-        boolean isPressed = false;
+        state = true; // Avvia del Game
 
-        graphic.createLobby();
-        do {
-            isPressed = graphic.isButtonConnectPressed();
-        } while (!isPressed);
-
-        while (true) {
-            if (isPressed = graphic.isButtonDiconnectPressed()) {
+        // Mentre il Game è in corso
+        while (state == true) {
+            if (graphic.isButtonDiconnectPressed()) {
                 requestAtServer.command = "disconnect";
+                state = false; // Il Game è finito
                 try {
                     clientTCP.send(requestAtServer.command);
                 } catch (IOException e) {
@@ -31,12 +30,23 @@ public class Game extends Thread {
                     e.printStackTrace();
                 }
             }
+
+            // Tutte le altre condizioni per i vari bottoni premuti
+            // Esempio: quando inserisce la pedina
+        } 
+        
+        // Quando il Game è finito
+        try {
+            clientTCP.close(); // Chiude la connessione
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
     // Gestione della risposta da parte del Server
     public void manageResponse() throws IOException {
-        String[] dataFromServer = clientTCP.data.split(";"); // Dati ricevuti dal Server: [0] -> command; [1] -> Pawns/Winner
+        String[] dataFromServer = clientTCP.serverResponse.split(";"); // Dati ricevuti dal Server: [0] -> command; [1] -> Pawns/Winner
         String command = dataFromServer[0]; // Comando ricevuto dal Server
         // Gestione del comando ricevuto dal Server
         switch (command) {
@@ -60,11 +70,12 @@ public class Game extends Thread {
             // Fine Game (l'avversario si è disconnesso)
             case "finish":
                 graphic.Disconnect();
+                this.state = false;
                 break;
             // Esito vincitore, di conseguenza fine Game
             case "winner":
                 graphic.WinnerScreenCreator();
-                clientTCP.close();
+                this.state = false;
                 break;
             // Non riconosciuto
             case "command not recognized":
