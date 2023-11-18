@@ -23,6 +23,8 @@ public class Game extends Thread {
             if (graphic.isButtonDiconnectPressed()) {
                 requestAtServer.command = "disconnect";
                 state = false; // Il Game è finito
+                graphic.Disconnect();
+                graphic.showDisconnect();
                 try {
                     clientTCP.send(requestAtServer.command);
                 } catch (IOException e) {
@@ -38,6 +40,8 @@ public class Game extends Thread {
         // Quando il Game è finito
         try {
             clientTCP.close(); // Chiude la connessione
+            graphic.createFinishScreen();
+            graphic.showFinishScreen();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -50,31 +54,32 @@ public class Game extends Thread {
         String command = dataFromServer[0]; // Comando ricevuto dal Server
         // Gestione del comando ricevuto dal Server
         switch (command) {
-            // Conferma della connessione
-            case "connection accepted":
-                graphic.createWaitingScreen();
-                break;
             // Attesa dell'avversario
             case "wait":
                 graphic.createWaitingScreen();
+                graphic.showWaitingScreen();
                 break;
             // Inizio Game
             case "start":
-                graphic.createCamp(playGround.rows, playGround.columns);
+                graphic.createGame(playGround.rows, playGround.columns);
+                graphic.showGame();
                 break;
             // Aggiornamento del PlayGround
             case "refresh":
                 String[] pawns = dataFromServer[1].split(","); // Pawns sono divise dalla virgola
                 insertPawns(pawns); // Inserisce le Pawns nel campo da gioco
+
+                graphic.createGame(playGround.rows, playGround.columns);
+                graphic.showGame();
                 break;
             // Fine Game (l'avversario si è disconnesso)
             case "finish":
-                graphic.Disconnect();
                 this.state = false;
                 break;
             // Esito vincitore, di conseguenza fine Game
             case "winner":
-                graphic.WinnerScreenCreator();
+                graphic.createWinnerScreen();
+                graphic.showWinnerScreen();
                 this.state = false;
                 break;
             // Non riconosciuto
