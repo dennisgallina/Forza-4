@@ -12,7 +12,9 @@ import org.xml.sax.SAXException;
 public class App {
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
         Graphic graphic = new Graphic();
-        while (!graphic.isButtonConnectPressed()) {} // Metre il bottone per connettersi non viene premuto
+        graphic.createLobby();
+        graphic.showLobby();
+        while (!graphic.isButtonConnectPressed()) {} // Mentre il bottone per connettersi non viene premuto
 
         // Dopo aver premuto il bottone per connettersi richiede al Server di connettersi
         String[] serverData = readServerDataFromXML("ServerData.xml"); // Legge l'IP e la Porta dal file XML
