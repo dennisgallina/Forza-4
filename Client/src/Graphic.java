@@ -13,13 +13,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 public class Graphic extends JFrame {
     private boolean buttonConnectPressed;
     private boolean buttonDisconnectPressed;
 
-    public void Graphic(){
+    public Graphic(){
         buttonConnectPressed = false;
         buttonDisconnectPressed = false;
     }
