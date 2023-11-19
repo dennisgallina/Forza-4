@@ -1,22 +1,15 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Graphic extends JFrame {
     private boolean buttonConnectPressed;
     private boolean buttonDisconnectPressed;
+    private String playerName;
 
     private JFrame lobbyFrame; // Finestra Lobby
     private JFrame waitingFrame; // Finestra Attesa dell'avversario
@@ -28,6 +21,7 @@ public class Graphic extends JFrame {
     public Graphic() {
         this.buttonConnectPressed = false;
         this.buttonDisconnectPressed = false;
+        this.playerName = "";
 
         this.lobbyFrame = new JFrame("Forza 4 - Lobby");
         this.waitingFrame = new JFrame("Forza 4 - Ricerca di un avversario");
@@ -49,48 +43,36 @@ public class Graphic extends JFrame {
 
     // Crea Lobby
     public void createLobby() {
-        // Crea una nuova finestra per la lobby
-        lobbyFrame.setSize(500, 500);
-        lobbyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        lobbyFrame.setLayout(new BorderLayout());
-    
-        // Aggiungi uno sfondo con un'immagine a tua scelta al centro della finestra
-        ImageIcon backgroundIcon = new ImageIcon(/*"path/del/tuo/file/immagine.jpg"*/);
-        JLabel backgroundLabel = new JLabel(backgroundIcon);
-        lobbyFrame.add(backgroundLabel, BorderLayout.CENTER);
-        backgroundLabel.setLayout(new FlowLayout());
-    
-        // Crea un pannello per il pulsante con uno sfondo grigio chiaro
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(new Color(192, 192, 192));
-    
-        // Crea un pulsante con la scritta "GIOCA" in giallo e dimensioni specifiche
-        JButton playButton = new JButton("GIOCA");
+        // Creazione della finestra principale
+        JFrame frame = new JFrame("Create Lobby");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Chiudi l'applicazione quando la finestra viene chiusa
+        frame.setSize(400, 200); // Imposta le dimensioni della finestra
+        frame.setLayout(new BorderLayout()); // Utilizza un layout di tipo BorderLayout
+        
+        // Creazione di un JLabel con l'immagine di sfondo
+        ImageIcon backgroundImage = new ImageIcon("percorso/del/tuo/sfondo.jpg");
+        JLabel backgroundLabel = new JLabel(backgroundImage);
+        backgroundLabel.setLayout(new BorderLayout());
+        
+        // Creazione del pannello del lobby
+        JPanel lobbyPanel = new JPanel();
+        lobbyPanel.setBackground(Color.GRAY);
+        lobbyPanel.setLayout(new BoxLayout(lobbyPanel, BoxLayout.Y_AXIS)); // Utilizza un layout verticale
+        
+        // Creazione del campo di testo per il nome del giocatore
+        JTextField playerNameField = new JTextField();
+        playerNameField.setBackground(Color.LIGHT_GRAY);
+        playerNameField.setMaximumSize(new Dimension(200, 30)); // Imposta le dimensioni massime
+        
+        // Creazione del pulsante "GIOCA!!"
+        JButton playButton = new JButton("GIOCA!!");
+        playButton.setBackground(Color.GRAY);
         playButton.setForeground(Color.YELLOW);
-        playButton.setPreferredSize(new Dimension(150, 50));
-    
-        // Aggiungi un ascoltatore per gestire l'azione del pulsante
-        playButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Imposta la variabile di stato quando il pulsante viene premuto
-                buttonConnectPressed = true;
-    
-                // Mostra un messaggio di avviso
-                JOptionPane.showMessageDialog(null, "ATTESA SERVER");
-            }
-        });
-    
-        // Aggiungi il pulsante al pannello
-        buttonPanel.add(playButton);
-    
-        // Aggiungi il pannello con il pulsante allo sfondo
-        backgroundLabel.add(buttonPanel);
-    
-        // Aggiungi il backgroundLabel alla finestra della lobby
-        lobbyFrame.add(backgroundLabel, BorderLayout.CENTER);
+        playButton.setAlignmentX(Component.CENTER_ALIGNMENT); // Allinea il pulsante al centro orizzontalmente
+
+        // Ottieni il testo inserito nel campo di testo
+        playerName = playerNameField.getText();
     }
-    
     // Visualizza Lobby
     public void showLobby() {
         lobbyFrame.setVisible(true);
