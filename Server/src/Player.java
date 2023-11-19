@@ -18,8 +18,10 @@ public class Player extends Thread {
     public void run() {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             // Continua a leggere le richieste dal client finché la socket non viene chiusa
-            while (!connection.isClosed()) 
+            while (!connection.isClosed()) {
                 clientRequest = new ClientRequest(in.readLine()); // Gestisce la richiesta del client
+                System.out.println(clientRequest.toConsole());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
