@@ -9,9 +9,9 @@ public class Pawn {
         this.positionY = 0;
     }
 
-    public Pawn(String color, int x, int y) {
+    public Pawn(String color, int positionX, int positionY) {
         this.color = color;
-        this.positionX = x;
-        this.positionY = y;
+        this.positionX = positionX;
+        this.positionY = positionY;
     }
 }

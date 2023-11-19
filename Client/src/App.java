@@ -11,19 +11,18 @@ import org.xml.sax.SAXException;
 
 public class App {
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
-        Graphic graphic = new Graphic();
-        graphic.createLobby();
-        graphic.showLobby();
+        Graphic graphic = new Graphic(); // Crea la Graphic
+        graphic.createLobby(); graphic.showLobby(); // Crea e visualizza la Lobby
         while (!graphic.isButtonConnectPressed()) {} // Mentre il bottone per connettersi non viene premuto
 
-        // Dopo aver premuto il bottone per connettersi richiede al Server di connettersi
-        String[] serverData = readServerDataFromXML("ServerData.xml"); // Legge l'IP e la Porta dal file XML
+        String[] serverData = readServerDataFromXML("src/ServerData.xml"); // Legge l'IP e la Porta del Server dal file XML
         ClientTCP clientTCP = new ClientTCP(serverData[0], Integer.parseInt(serverData[1])); // serverData[0] -> IP, serverData[1] -> Porta
-        clientTCP.start(); // Avvia il Thread per ascoltare il Server
-        clientTCP.send("connect"); // Richiede la connessione al Server
-        while (!clientTCP.serverResponse.equals("connection accepted")) {} // Mentre il Server non invia la conferma di connessione
 
-        Game game = new Game(graphic, clientTCP);
+        clientTCP.connect(); // Richiede la connessione al Server
+        clientTCP.start(); // Avvia il Thread per ascoltare il Server
+        while (!clientTCP.isConnected()) {} // Attende la connessione col Server
+
+        Game game = new Game(graphic, clientTCP); // Crea il Game
         game.start(); // Avvia il Thread per gestire il Game
     }
 
