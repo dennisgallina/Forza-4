@@ -1,26 +1,18 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 public class Graphic extends JFrame {
     private boolean buttonConnectPressed;
     private boolean buttonDisconnectPressed;
+    private boolean buttonPawnPressed;
+    public int buttonPawnPressedY;
+    public int buttonPawnPressedX;
 
     private JFrame lobbyFrame; // Finestra Lobby
     private JFrame waitingFrame; // Finestra Attesa dell'avversario
-    private JFrame gameFrame; // Finestra Partita
+    private JFrame playGroundFrame; // Finestra Campo
     private JFrame disconnectFrame; // Finestra Disconnessione
     private JFrame winnerFrame; // Finestra Esito della partita
     private JFrame finishFrame; // Finestra Fine partita
@@ -28,70 +20,63 @@ public class Graphic extends JFrame {
     public Graphic() {
         this.buttonConnectPressed = false;
         this.buttonDisconnectPressed = false;
+        this.buttonPawnPressed = false;
+        this.buttonPawnPressedY = -1;
+        this.buttonPawnPressedX = -1;
 
         this.lobbyFrame = new JFrame("Forza 4 - Lobby");
         this.waitingFrame = new JFrame("Forza 4 - Ricerca di un avversario");
-        this.gameFrame = new JFrame("Forza 4 - Partita");
+        this.playGroundFrame = new JFrame("Forza 4 - Partita");
         this.disconnectFrame = new JFrame("Forza 4 - Disconnesso");
         this.winnerFrame = new JFrame("Forza 4 - Esito Partita");
         this.finishFrame = new JFrame("Forza 4 - Partita Terminata");
     }
 
-    // Controllo bottone connetti
-    public boolean isButtonConnectPressed() {
-        return buttonConnectPressed;
-    }
-
-    // Controllo bottone disconneti
-    public boolean isButtonDiconnectPressed() {
-        return buttonDisconnectPressed;
-    }
-
     // Crea Lobby
     public void createLobby() {
-        // Crea una nuova finestra per la lobby
         lobbyFrame.setSize(500, 500);
         lobbyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        lobbyFrame.setLayout(new BorderLayout());
-    
-        // Aggiungi uno sfondo con un'immagine a tua scelta al centro della finestra
-        ImageIcon backgroundIcon = new ImageIcon(/*"path/del/tuo/file/immagine.jpg"*/);
-        JLabel backgroundLabel = new JLabel(backgroundIcon);
-        lobbyFrame.add(backgroundLabel, BorderLayout.CENTER);
-        backgroundLabel.setLayout(new FlowLayout());
-    
+
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BorderLayout());
+
         // Crea un pannello per il pulsante con uno sfondo grigio chiaro
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(new Color(192, 192, 192));
-    
-        // Crea un pulsante con la scritta "GIOCA" in giallo e dimensioni specifiche
+        buttonPanel.setBackground(new Color(240, 240, 240));
+
+        // Crea un pulsante con la scritta "GIOCA" in blu e dimensioni specifiche
         JButton playButton = new JButton("GIOCA");
-        playButton.setForeground(Color.YELLOW);
+        playButton.setForeground(new Color(0, 102, 204)); // Colore blu
         playButton.setPreferredSize(new Dimension(150, 50));
-    
+
         // Aggiungi un ascoltatore per gestire l'azione del pulsante
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Imposta la variabile di stato quando il pulsante viene premuto
                 buttonConnectPressed = true;
-    
+
                 // Mostra un messaggio di avviso
                 JOptionPane.showMessageDialog(null, "ATTESA SERVER");
             }
         });
-    
+
         // Aggiungi il pulsante al pannello
         buttonPanel.add(playButton);
-    
-        // Aggiungi il pannello con il pulsante allo sfondo
-        backgroundLabel.add(buttonPanel);
-    
-        // Aggiungi il backgroundLabel alla finestra della lobby
-        lobbyFrame.add(backgroundLabel, BorderLayout.CENTER);
+
+        // Aggiungi il pannello del pulsante al pannello principale
+        contentPanel.add(buttonPanel, BorderLayout.CENTER);
+
+        // Imposta il pannello principale come contenuto della finestra della lobby
+        lobbyFrame.setContentPane(contentPanel);
+
+        // Imposta le proprietà della finestra
+        lobbyFrame.pack();
+        lobbyFrame.setLocationRelativeTo(null);
+        lobbyFrame.setVisible(true);
     }
-    
-    // Visualizza Lobby
+
+    // Visualizza la Lobby
     public void showLobby() {
         lobbyFrame.setVisible(true);
     }
@@ -102,8 +87,7 @@ public class Graphic extends JFrame {
         waitingFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         waitingFrame.setLayout(new BorderLayout());
 
-        ImageIcon backgroundIcon = new ImageIcon(/*"path/del/tuo/file/immagine.jpg"*/);
-        JLabel backgroundLabel = new JLabel(backgroundIcon);
+        JLabel backgroundLabel = new JLabel();
         waitingFrame.add(backgroundLabel, BorderLayout.CENTER);
         backgroundLabel.setLayout(new FlowLayout());
 
@@ -126,38 +110,57 @@ public class Graphic extends JFrame {
     }
 
     // Crea il campo da gioco
-    public void createGame(int rows, int columns) {
-        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public void createPlayGround(int rows, int columns, Pawn[][] pawns, String currentPlayerName) {
+        playGroundFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        int righe = rows;
-        int colonne = columns;
+        char[][] board = new char[rows][columns];
+        JButton[][] buttons = new JButton[rows][columns];
 
-        char[][] board = new char[righe][colonne];
-        JButton[][] buttons = new JButton[righe][colonne];
+        JPanel boardPanel = new JPanel(new GridLayout(rows, columns));
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                board[row][column] = ' ';
+                buttons[row][column] = new JButton();
 
-        JPanel boardPanel = new JPanel(new GridLayout(righe, colonne));
-        for (int i = 0; i < righe; i++) {
-            for (int j = 0; j < colonne; j++) {
-                board[i][j] = ' ';
-                buttons[i][j] = new JButton();
-                buttons[i][j].setPreferredSize(new Dimension(80, 80));
-                buttons[i][j].setFont(new Font("Arial", Font.PLAIN, 40));
-                boardPanel.add(buttons[i][j]);
+                if (pawns[row][column].color.equals("red")) {
+                    buttons[row][column].setEnabled(false);
+                    buttons[row][column].setBackground(Color.RED);
+                } else if (pawns[row][column].color.equals("yellow")) {
+                    buttons[row][column].setEnabled(false);
+                    buttons[row][column].setBackground(Color.YELLOW);
+                }
+
+                buttons[row][column].setPreferredSize(new Dimension(80, 80));
+                buttons[row][column].setFont(new Font("Arial", Font.PLAIN, 40));
+                boardPanel.add(buttons[row][column]);
+
+                // Use final array to make variables effectively final
+                final int[] position = {row, column};
+
+                // Aggiungi un ActionListener al bottone
+                buttons[row][column].addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        buttonPawnPressed = true;
+                        buttonPawnPressedY = position[0];
+                        buttonPawnPressedX = position[1];
+                    }
+                });
             }
         }
 
-        gameFrame.add(boardPanel, BorderLayout.CENTER);
+        playGroundFrame.add(boardPanel, BorderLayout.CENTER);
 
-        JLabel statusLabel = new JLabel("Turno: Giocatore X");
-        gameFrame.add(statusLabel, BorderLayout.SOUTH);
+        JLabel statusLabel = new JLabel("Turno: " + currentPlayerName);
+        playGroundFrame.add(statusLabel, BorderLayout.SOUTH);
 
-        gameFrame.pack();
-        gameFrame.setLocationRelativeTo(null);
+        playGroundFrame.pack();
+        playGroundFrame.setLocationRelativeTo(null);
     }
 
     // Visualizza la partita
-    public void showGame() {
-        gameFrame.setVisible(true);
+    public void showPlayGround() {
+        playGroundFrame.setVisible(true);
     }
 
     // Crea la schermata di disconnessione
@@ -166,15 +169,14 @@ public class Graphic extends JFrame {
         disconnectFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         disconnectFrame.setLayout(new BorderLayout());
 
-        ImageIcon backgroundIcon = new ImageIcon("path/del/tuo/file/immagine_sfondo.jpg");
-        JLabel backgroundLabel = new JLabel(backgroundIcon);
+        JLabel backgroundLabel = new JLabel();
         disconnectFrame.add(backgroundLabel, BorderLayout.CENTER);
         backgroundLabel.setLayout(new FlowLayout());
 
         JPanel textPanel = new JPanel();
         textPanel.setBackground(new Color(192, 192, 192));
 
-        JLabel disconnectedLabel = new JLabel("L'avversario si è disconnesso");
+        JLabel disconnectedLabel = new JLabel("L'avversario si è disconnesso.");
         disconnectedLabel.setForeground(Color.YELLOW);
         disconnectedLabel.setFont(new Font(disconnectedLabel.getFont().getName(), Font.PLAIN, 24));
 
@@ -193,25 +195,22 @@ public class Graphic extends JFrame {
         winnerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         winnerFrame.setLayout(new BorderLayout());
 
-        ImageIcon backgroundIcon = new ImageIcon("path/del/tuo/file/immagine_sfondo.jpg");
-        JLabel backgroundLabel = new JLabel(backgroundIcon);
+        JLabel backgroundLabel = new JLabel();
         winnerFrame.add(backgroundLabel, BorderLayout.CENTER);
         backgroundLabel.setLayout(new FlowLayout());
 
         JPanel textPanel = new JPanel();
         textPanel.setBackground(new Color(192, 192, 192));
 
-        JLabel winnerLabel = new JLabel("HAI VINTO!!!");
+        JLabel winnerLabel = new JLabel("HAI VINTO!");
         winnerLabel.setForeground(Color.YELLOW);
         winnerLabel.setFont(new Font(winnerLabel.getFont().getName(), Font.PLAIN, 24));
 
         textPanel.add(winnerLabel);
 
-        ImageIcon trophyIcon = new ImageIcon("path/del/tuo/file/immagine_coppa.jpg");
-        JLabel trophyLabel = new JLabel(trophyIcon);
+        // Puoi aggiungere ulteriori componenti o personalizzazioni in base alle tue esigenze
 
         backgroundLabel.add(textPanel);
-        backgroundLabel.add(trophyLabel);
     }
 
     // Visualizza la schermata di esito partita
@@ -225,8 +224,7 @@ public class Graphic extends JFrame {
         finishFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         finishFrame.setLayout(new BorderLayout());
 
-        ImageIcon backgroundIcon = new ImageIcon("path/del/tuo/file/immagine_sfondo_finish.jpg");
-        JLabel backgroundLabel = new JLabel(backgroundIcon);
+        JLabel backgroundLabel = new JLabel();
         finishFrame.add(backgroundLabel, BorderLayout.CENTER);
         backgroundLabel.setLayout(new FlowLayout());
 
@@ -251,5 +249,20 @@ public class Graphic extends JFrame {
     // Messaggio di errore
     public void messagError() {
         JOptionPane.showMessageDialog(null, "Comando errato!");
+    }
+
+    // Controllo bottone connetti
+    public boolean isButtonConnectPressed() {
+        return buttonConnectPressed;
+    }
+
+    // Controllo bottone disconneti
+    public boolean isButtonDiconnectPressed() {
+        return buttonDisconnectPressed;
+    }
+
+    // Controllo bottone disconneti
+    public boolean isButtonPawnPressed() {
+        return buttonPawnPressed;
     }
 }
