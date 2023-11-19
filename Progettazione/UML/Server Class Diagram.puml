@@ -1,0 +1,58 @@
+@startuml Forza 4 - Server
+Class "ClientRequest" {
+    +ClientRequest(request)
+
+    +command
+    +positionX
+}
+
+Class "ConnectionsManager" {
+    +ConnectionsManager()
+
+    -connections
+}
+
+class "Game" {
+    +Game(Player1, Player2)
+
+    +state
+    +playGround
+    +player1
+    +player2
+    +currentPlayer
+}
+
+class "Pawn" {
+    +Pawn()
+    +Pawn(color, positionX, positionY)
+
+    +color
+    +positionX
+    +positionY
+}
+
+class "Player" {
+    +Player(name, pawnsColor)
+
+    +name
+    +pawnsColor
+    +connection
+    +clientRequest
+}
+
+class "PlayGround" {
+    +PlayGround()
+
+    +colums
+    +rows
+    +pawns[][]
+    +columnHeigths
+}
+
+Class "ServerTCP" {
+    +ServerTCP(port)
+
+    +serverSocket
+    +connectionsManager
+}
+@enduml
