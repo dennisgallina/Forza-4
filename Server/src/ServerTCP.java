@@ -7,23 +7,21 @@ public class ServerTCP {
     public ServerSocket serverSocket; // Socket del Server
     public ConnectionsManager connectionsManager; // Gestore delle connessioni create
 
-    public ServerTCP(int porta) throws IOException {
-        this.serverSocket = new ServerSocket(porta);
+    public ServerTCP(int port) throws IOException {
+        this.serverSocket = new ServerSocket(port);
         this.connectionsManager = new ConnectionsManager();
     }
 
-    // Accetta una connessione dal client
+    // Accetta una connessione dal Client
     public Socket acceptConnection() throws IOException {
-        // Accetta una connessione dal client e la restituisce
-        Socket socket = serverSocket.accept();
-        ClientRequest clientRequest = new ClientRequest("connect");
-        System.out.println(clientRequest.toConsole());
-        if (connectionsManager.add(socket));
+        Socket socket = serverSocket.accept();  // Accetta la connessione
+        System.out.println("Richiesta del Client " + socket.getInetAddress().toString() + ":connect");
+        if (connectionsManager.add(socket))
             send("connection accepted", socket);
         return socket;
     }
 
-    // Invia un messaggio a un client specifico
+    // Invia un messaggio a un Client specifico
     public void send(String message, Socket connection) throws IOException {
         PrintWriter out = new PrintWriter(connection.getOutputStream(), true); // Crea un PrintWriter per inviare dati al client
         out.println(message);  // Invia il messaggio al client
