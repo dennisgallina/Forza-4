@@ -4,19 +4,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Graphic extends JFrame {
-    private boolean buttonConnectPressed;
-    private boolean buttonDisconnectPressed;
-    private boolean buttonPawnPressed;
-    public int buttonPawnPressedY;
-    public int buttonPawnPressedX;
+    private boolean buttonConnectPressed;  // Variabile di stato per il pulsante "Connetti"
+    private boolean buttonDisconnectPressed;  // Variabile di stato per il pulsante "Disconnetti"
+    private boolean buttonPawnPressed;  // Variabile di stato per il pulsante "Pedina"
+    public int buttonPawnPressedY;  // Coordinata Y della pedina premuta
+    public int buttonPawnPressedX;  // Coordinata X della pedina premuta
 
-    private JFrame lobbyFrame; // Finestra Lobby
-    private JFrame waitingFrame; // Finestra Attesa dell'avversario
-    private JFrame playGroundFrame; // Finestra Campo
-    private JFrame disconnectFrame; // Finestra Disconnessione
-    private JFrame winnerFrame; // Finestra Esito della partita
-    private JFrame finishFrame; // Finestra Fine partita
+    private JFrame gameFrame;  // Finestra principale del gioco
 
+    // Costruttore
     public Graphic() {
         this.buttonConnectPressed = false;
         this.buttonDisconnectPressed = false;
@@ -24,21 +20,30 @@ public class Graphic extends JFrame {
         this.buttonPawnPressedY = -1;
         this.buttonPawnPressedX = -1;
 
-        this.lobbyFrame = new JFrame("Forza 4 - Lobby");
-        this.waitingFrame = new JFrame("Forza 4 - Ricerca di un avversario");
-        this.playGroundFrame = new JFrame("Forza 4 - Partita");
-        this.disconnectFrame = new JFrame("Forza 4 - Disconnesso");
-        this.winnerFrame = new JFrame("Forza 4 - Esito Partita");
-        this.finishFrame = new JFrame("Forza 4 - Partita Terminata");
+        this.gameFrame = new JFrame("Forza 4");  // Inizializza la finestra principale
     }
 
-    // Crea Lobby
-    public void createLobby() {
-        lobbyFrame.setSize(500, 500);
-        lobbyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    // Mostra la Lobby
+    public void showLobby() {
+        updateTitle("Forza 4 - Lobby");  // Aggiorna il titolo della finestra
 
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new BorderLayout());
+        gameFrame.setSize(600, 600);  // Imposta le dimensioni della finestra
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
+        gameFrame.setVisible(true);  // Rende la finestra visibile
+
+        JPanel contentPanel = new JPanel();  // Crea un pannello per il contenuto della finestra
+        contentPanel.setLayout(new BorderLayout());  // Imposta il layout del pannello principale
+
+        // Crea un pannello con il titolo
+        JPanel titlePanel = new JPanel();
+        titlePanel.setBackground(new Color(0, 102, 204));
+
+        JLabel titleLabel = new JLabel("Benvenuto in Forza 4");
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+
+        titlePanel.add(titleLabel);
+        contentPanel.add(titlePanel, BorderLayout.NORTH);
 
         // Crea un pannello per il pulsante con uno sfondo grigio chiaro
         JPanel buttonPanel = new JPanel();
@@ -46,7 +51,7 @@ public class Graphic extends JFrame {
 
         // Crea un pulsante con la scritta "GIOCA" in blu e dimensioni specifiche
         JButton playButton = new JButton("GIOCA");
-        playButton.setForeground(new Color(0, 102, 204)); // Colore blu
+        playButton.setForeground(new Color(0, 102, 204));  // Colore blu
         playButton.setPreferredSize(new Dimension(150, 50));
 
         // Aggiungi un ascoltatore per gestire l'azione del pulsante
@@ -67,28 +72,31 @@ public class Graphic extends JFrame {
         // Aggiungi il pannello del pulsante al pannello principale
         contentPanel.add(buttonPanel, BorderLayout.CENTER);
 
+        // Crea un pannello decorativo
+        JPanel decorationPanel = new JPanel();
+        decorationPanel.setBackground(new Color(0, 102, 204));
+
+        contentPanel.add(decorationPanel, BorderLayout.SOUTH);
+
         // Imposta il pannello principale come contenuto della finestra della lobby
-        lobbyFrame.setContentPane(contentPanel);
+        gameFrame.setContentPane(contentPanel);
 
         // Imposta le proprietà della finestra
-        lobbyFrame.pack();
-        lobbyFrame.setLocationRelativeTo(null);
-        lobbyFrame.setVisible(true);
+        gameFrame.pack();
+        gameFrame.setLocationRelativeTo(null);
     }
 
-    // Visualizza la Lobby
-    public void showLobby() {
-        lobbyFrame.setVisible(true);
-    }
+    // Mostra la schermata di attesa
+    public void showWaitingScreen() {
+        updateTitle("Forza 4 - Ricerca di un avversario");  // Aggiorna il titolo della finestra
 
-    // Crea la schermata di attesa
-    public void createWaitingScreen() {
-        waitingFrame.setSize(500, 500);
-        waitingFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        waitingFrame.setLayout(new BorderLayout());
+        gameFrame.setSize(500, 500);  // Imposta le dimensioni della finestra
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
+        gameFrame.setVisible(true);  // Rende la finestra visibile
+        gameFrame.setLayout(new BorderLayout());  // Imposta il layout della finestra
 
         JLabel backgroundLabel = new JLabel();
-        waitingFrame.add(backgroundLabel, BorderLayout.CENTER);
+        gameFrame.add(backgroundLabel, BorderLayout.CENTER);
         backgroundLabel.setLayout(new FlowLayout());
 
         JPanel textPanel = new JPanel();
@@ -104,14 +112,11 @@ public class Graphic extends JFrame {
         backgroundLabel.add(textPanel);
     }
 
-    // Visualizza la schermata di attesa
-    public void showWaitingScreen() {
-        waitingFrame.setVisible(true);
-    }
+    // Mostra il campo da gioco
+    public void showPlayGround(int rows, int columns, Pawn[][] pawns, String currentPlayerName) {
+        updateTitle("Forza 4 - Partita");  // Aggiorna il titolo della finestra
 
-    // Crea il campo da gioco
-    public void createPlayGround(int rows, int columns, Pawn[][] pawns, String currentPlayerName) {
-        playGroundFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
 
         char[][] board = new char[rows][columns];
         JButton[][] buttons = new JButton[rows][columns];
@@ -122,12 +127,14 @@ public class Graphic extends JFrame {
                 board[row][column] = ' ';
                 buttons[row][column] = new JButton();
 
-                if (pawns[row][column].color.equals("red")) {
-                    buttons[row][column].setEnabled(false);
-                    buttons[row][column].setBackground(Color.RED);
-                } else if (pawns[row][column].color.equals("yellow")) {
-                    buttons[row][column].setEnabled(false);
-                    buttons[row][column].setBackground(Color.YELLOW);
+                if (pawns[row][column] != null) {
+                    if (pawns[row][column].color.equals("red")) {
+                        buttons[row][column].setEnabled(false);
+                        buttons[row][column].setBackground(Color.RED);
+                    } else if (pawns[row][column].color.equals("yellow")) {
+                        buttons[row][column].setEnabled(false);
+                        buttons[row][column].setBackground(Color.YELLOW);
+                    }
                 }
 
                 buttons[row][column].setPreferredSize(new Dimension(80, 80));
@@ -149,28 +156,25 @@ public class Graphic extends JFrame {
             }
         }
 
-        playGroundFrame.add(boardPanel, BorderLayout.CENTER);
+        gameFrame.add(boardPanel, BorderLayout.CENTER);
 
         JLabel statusLabel = new JLabel("Turno: " + currentPlayerName);
-        playGroundFrame.add(statusLabel, BorderLayout.SOUTH);
+        gameFrame.add(statusLabel, BorderLayout.SOUTH);
 
-        playGroundFrame.pack();
-        playGroundFrame.setLocationRelativeTo(null);
+        gameFrame.pack();
+        gameFrame.setLocationRelativeTo(null);
     }
 
-    // Visualizza la partita
-    public void showPlayGround() {
-        playGroundFrame.setVisible(true);
-    }
+    // Mostra la schermata di disconnessione
+    public void showDisconnect() {
+        updateTitle("Forza 4 - Disconnesso");  // Aggiorna il titolo della finestra
 
-    // Crea la schermata di disconnessione
-    public void Disconnect() {
-        disconnectFrame.setSize(500, 500);
-        disconnectFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        disconnectFrame.setLayout(new BorderLayout());
+        gameFrame.setSize(500, 500);  // Imposta le dimensioni della finestra
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
+        gameFrame.setLayout(new BorderLayout());  // Imposta il layout della finestra
 
         JLabel backgroundLabel = new JLabel();
-        disconnectFrame.add(backgroundLabel, BorderLayout.CENTER);
+        gameFrame.add(backgroundLabel, BorderLayout.CENTER);
         backgroundLabel.setLayout(new FlowLayout());
 
         JPanel textPanel = new JPanel();
@@ -184,19 +188,16 @@ public class Graphic extends JFrame {
         backgroundLabel.add(textPanel);
     }
 
-    // Visualizza la schermata di disconnessione
-    public void showDisconnect() {
-        disconnectFrame.setVisible(true);
-    }
+    // Mostra la schermata di vincita/perdita
+    public void showWinnerScreen() {
+        updateTitle("Forza 4 - Esito Partita");  // Aggiorna il titolo della finestra
 
-    // Visualizza la schermata di vincita/perdita
-    public void createWinnerScreen() {
-        winnerFrame.setSize(500, 500);
-        winnerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        winnerFrame.setLayout(new BorderLayout());
+        gameFrame.setSize(500, 500);  // Imposta le dimensioni della finestra
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
+        gameFrame.setLayout(new BorderLayout());  // Imposta il layout della finestra
 
         JLabel backgroundLabel = new JLabel();
-        winnerFrame.add(backgroundLabel, BorderLayout.CENTER);
+        gameFrame.add(backgroundLabel, BorderLayout.CENTER);
         backgroundLabel.setLayout(new FlowLayout());
 
         JPanel textPanel = new JPanel();
@@ -207,25 +208,19 @@ public class Graphic extends JFrame {
         winnerLabel.setFont(new Font(winnerLabel.getFont().getName(), Font.PLAIN, 24));
 
         textPanel.add(winnerLabel);
-
-        // Puoi aggiungere ulteriori componenti o personalizzazioni in base alle tue esigenze
-
         backgroundLabel.add(textPanel);
     }
 
-    // Visualizza la schermata di esito partita
-    public void showWinnerScreen() {
-        winnerFrame.setVisible(true);
-    }
+    // Mostra la schermata di fine gioco
+    public void showFinishScreen() {
+        updateTitle("Forza 4 - Partita Terminata");  // Aggiorna il titolo della finestra
 
-    // Schermata di fine gioco
-    public void createFinishScreen() {
-        finishFrame.setSize(500, 500);
-        finishFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        finishFrame.setLayout(new BorderLayout());
+        gameFrame.setSize(500, 500);  // Imposta le dimensioni della finestra
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
+        gameFrame.setLayout(new BorderLayout());  // Imposta il layout della finestra
 
         JLabel backgroundLabel = new JLabel();
-        finishFrame.add(backgroundLabel, BorderLayout.CENTER);
+        gameFrame.add(backgroundLabel, BorderLayout.CENTER);
         backgroundLabel.setLayout(new FlowLayout());
 
         JPanel textPanel = new JPanel();
@@ -236,14 +231,7 @@ public class Graphic extends JFrame {
         finishLabel.setFont(new Font(finishLabel.getFont().getName(), Font.PLAIN, 24));
 
         textPanel.add(finishLabel);
-
-        // Puoi aggiungere ulteriori componenti o personalizzazioni in base alle tue esigenze
-
         backgroundLabel.add(textPanel);
-    }
-
-    public void showFinishScreen() {
-        finishFrame.setVisible(true);
     }
 
     // Messaggio di errore
@@ -256,13 +244,18 @@ public class Graphic extends JFrame {
         return buttonConnectPressed;
     }
 
-    // Controllo bottone disconneti
+    // Controllo bottone disconnetti
     public boolean isButtonDiconnectPressed() {
         return buttonDisconnectPressed;
     }
 
-    // Controllo bottone disconneti
+    // Controllo bottone disconnetti
     public boolean isButtonPawnPressed() {
         return buttonPawnPressed;
+    }
+
+    // Aggiorna il titolo della finestra
+    private void updateTitle(String title) {
+        gameFrame.setTitle(title);
     }
 }

@@ -1,101 +1,89 @@
 import java.io.IOException;
 
-public class Game extends Thread {
+public class Game {
+    public ClientTCP clientTCP; // Comunicazione col Server
     public boolean state; // Stato della partita: true -> game in corso, false -> game non iniziato/finito
     public Graphic graphic; // Grafica della partita
     public PlayGround playGround; // Griglia di gioco
     public String currentPlayerName; // Nome del giocatore del turno corrente
-    public ClientTCP clientTCP; // Comunicazione col Server
-    public RequestAtServer requestAtServer; // Richiesta al Server
 
     public Game(Graphic graphic, ClientTCP clientTCP) throws IOException {
+        this.clientTCP = clientTCP;
         this.state = false;
         this.graphic = graphic;
         this.playGround = new PlayGround();
         this.currentPlayerName = "Player 1";
-        this.clientTCP = clientTCP;
-        this.requestAtServer = new RequestAtServer();
     }
 
-    public void run() {
+    public void start() throws IOException {
+        // Fase di attesa dell'avverario
         while (!state) {
-            try {
+            if (clientTCP.haveResponsesFromServer()) // Controlla ci siano risposte dal Server in coda
                 manageResponse();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         }
 
         // Mentre il Game è in corso
         while (state == true) {
             // Richiede di inserire una pedina
             if (graphic.isButtonPawnPressed()) 
-                requestAtServer.command = "insert;" + graphic.buttonPawnPressedX; // Prepara la richiesta al Server
+                clientTCP.send(new RequestAtServer("insert", graphic.buttonPawnPressedX)); // Invia la richiesta al Server
 
             // Richiede di disconnettersi
             if (graphic.isButtonDiconnectPressed()) {
-                requestAtServer.command = "disconnect"; // Prepara la richiesta al Server
                 state = false; // Il Game è finito
-                graphic.Disconnect(); graphic.showDisconnect(); // Crea e visualizza la schermata di disconnessione
+                graphic.showDisconnect(); // Crea e visualizza la schermata di disconnessione
+                clientTCP.send(new RequestAtServer("insert")); // Invia la richiesta al Server
             }
 
-            try {
-                clientTCP.send(requestAtServer.command); // Invia la richiesta al Server
-                manageResponse(); // Gestisce la risposta ricevuta dal Server
-                clientTCP.cleanResponse(); // Dopo aver eseguito il comando lo pulisce per evitare ripetizioni
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            if (clientTCP.haveResponsesFromServer()) // Controlla ci siano risposte dal Server in coda
+                manageResponse();
         } 
-        
-        // Quando il Game è finito
-        try {
-            clientTCP.close(); // Chiude la connessione
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+
+        clientTCP.close(); // Chiude la connessione
     }
 
     // Gestione della risposta da parte del Server
     public void manageResponse() throws IOException {
-        String[] dataFromServer = clientTCP.serverResponse.split(";"); // Dati ricevuti dal Server: [0] -> command; [1] -> Pawns/Winner
-        String command = dataFromServer[0]; // Comando ricevuto dal Server
+        ServerResponse serverResponse = clientTCP.getOldResponse();
         // Gestione del comando ricevuto dal Server
-        switch (command) {
+        switch (serverResponse.command) {
             // Attesa dell'avversario
             case "wait":
-                graphic.createWaitingScreen(); graphic.showWaitingScreen(); // Crea e visualizza la schermata di attesa dell'avversario
+                graphic.showWaitingScreen(); // Visualizza la schermata di attesa dell'avversario
+                clientTCP.removeOldResponse();
                 break;
             // Inizio Game
             case "start":
                 state = true;
-                graphic.createPlayGround(playGround.rows, playGround.columns, playGround.pawns, currentPlayerName); graphic.showPlayGround();
+                clientTCP.removeOldResponse();
                 break;
             // Cambia il turno del giocatore
             case "turn":
-                currentPlayerName = dataFromServer[1];
+                currentPlayerName = serverResponse.description;
+                clientTCP.removeOldResponse();
             // Aggiornamento del PlayGround
             case "refresh":
-                String[] pawns = dataFromServer[1].split(","); // Pawns sono divise dalla virgola
+                String[] pawns = serverResponse.description.split(","); // Pawns sono divise dalla virgola
                 insertPawns(pawns); // Inserisce le Pawns nel campo da gioco
-                graphic.createPlayGround(playGround.rows, playGround.columns, playGround.pawns, currentPlayerName); graphic.showPlayGround();
+                graphic.showPlayGround(playGround.rows, playGround.columns, playGround.pawns, currentPlayerName); //Visualizza il campo da gioco
+                clientTCP.removeOldResponse();
                 break;
-            // Fine Game (l'avversario si è disconnesso)
+            // Fine Game 
             case "finish":
                 this.state = false;
-                graphic.createFinishScreen(); graphic.showFinishScreen();
+                graphic.showFinishScreen();
+                clientTCP.removeOldResponse();
                 break;
             // Esito vincitore, di conseguenza fine Game
             case "winner":
                 this.state = false;
-                graphic.createWinnerScreen(); graphic.showWinnerScreen();
+                graphic.showWinnerScreen(); 
+                clientTCP.removeOldResponse();
                 break;
             // Non riconosciuto
             case "command not recognized":
-                graphic.messagError();
+                graphic.messagError(); // Visualizza messaggio di errore
+                clientTCP.removeOldResponse();
                 break;
             default:
                 break;

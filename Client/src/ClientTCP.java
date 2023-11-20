@@ -3,12 +3,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.List;
 
-public class ClientTCP extends Thread{
+public class ClientTCP extends Thread {
     private Socket connection; // Connessione del Client
+    private String serverIp; // IP del Server
+    private String serverPort; // Porta del Server
     private BufferedReader input; // Ricezione Dati
     private PrintWriter output; // Invio Dati
-    public String serverResponse; // Risposta ricevuta dal Server
+    public RequestAtServer requestAtServer; // Richiesta al Server
+    public List<ServerResponse> serverResponses; // Risposte ricevuta dal Server
 
     public ClientTCP(String serverIp, int serverPort) throws IOException {
         this.connection = new Socket(serverIp, serverPort); // Aggiunta dei dati del Server
@@ -20,23 +24,28 @@ public class ClientTCP extends Thread{
         // Resta in ascolto del Server finché la Connessione è attiva
         while (isConnected()) {
             try {
-                serverResponse = input.readLine(); // Riceve dati dal Server
-                if (serverResponse != null)
-                    System.out.println("Risposta dal Server:" + serverResponse);
+                String dataFromServer = input.readLine(); // Riceve dati dal Server 
+                manageDataFromServer(dataFromServer); // Gestisce i dati ricevuti dal Server
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-            }
+            } 
         }
     } 
 
-    public void connect() throws IOException {
-        send("connect");
+    private void manageDataFromServer(String dataFromServer) {
+        if (dataFromServer != null) {
+            System.out.println("Risposta da Server " + serverIp + ":" + dataFromServer); // Output in console
+
+            String[] splittedDataFromServer = dataFromServer.split(";"); // Divide i dati: [0] -> comando; [1] -> descrizione comando
+            serverResponses.add(new ServerResponse(splittedDataFromServer)); // Aggiunge alla coda
+        }
     }
 
-    // Invia dei dati al Server
-    public void send(String data) throws IOException {
-        output.println(data);
+    // Invia la richiesta al Server
+    public void send(RequestAtServer requestAtServer) throws IOException {
+        System.out.println("Risposta da Server " + serverIp + ":" + requestAtServer.toString());
+        output.println(requestAtServer.toString());
     }
 
     // Chiude la Connessione col Server
@@ -53,7 +62,21 @@ public class ClientTCP extends Thread{
             return false;
     }
 
-    public void cleanResponse() {
-        serverResponse = null;
+    public boolean haveResponsesFromServer() {
+        if (serverResponses.isEmpty())
+            return false;
+        else 
+            return true;
+    }
+
+    public ServerResponse getOldResponse() {
+        if (haveResponsesFromServer())
+            return serverResponses.get(0);
+        else
+            return null;
+    }
+
+    public void removeOldResponse() {
+        serverResponses.remove(0);
     }
 }
