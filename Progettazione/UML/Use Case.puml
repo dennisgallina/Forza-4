@@ -2,7 +2,7 @@
 left to right direction
 actor "User" as actorUser
 rectangle Client {
-    usecase "'connect'" as C_UC1 #YellowGreen
+    usecase "connect" as C_UC1 #YellowGreen
     usecase "'insert;positionX'" as C_UC2 #YellowGreen
     usecase "'disconnect'" as C_UC3 #YellowGreen
     usecase "*command inexistent" as C_UC3 #YellowGreen
