@@ -1,6 +1,6 @@
 import java.io.IOException;
 
-public class Game extends Thread{
+public class Game extends Thread {
     public ServerTCP serverTCP; // Server su cui è situata la partita
     public boolean state; // Stato della partita: true -> in corso; false -> non in corso
     public PlayGround playGround; // Griglia di gioco
@@ -8,7 +8,8 @@ public class Game extends Thread{
     public Player player2; // Giocatore 2
     public Player currentPlayer; // Giocatore corrente
 
-    public Game(Player player1, Player player2) {
+    public Game(ServerTCP serverTCP, Player player1, Player player2) {
+        this.serverTCP = serverTCP;
         this.state = false;
         this.playGround = new PlayGround();
         this.player1 = player1;
@@ -24,15 +25,18 @@ public class Game extends Thread{
         try {
             // Invia lo stato del gioco a tutti i client
             serverTCP.sendAtAll("start");
-            serverTCP.sendAtAll(playGround.getPawns());
+            serverTCP.sendAtAll("refresh;" + playGround.getPawns());
         } catch (IOException e) {
             e.printStackTrace();
         }
     
+        currentPlayer.clientRequest = null;
         // Continua a eseguire il gioco finché la partita è attiva ed entrambi i giocatori sono connessi
         while (this.state == true && state && player1.isAlive() && player2.isAlive()) {
+
             try {
-                manageRequest(currentPlayer.clientRequest);
+                if (currentPlayer.clientRequest != null)
+                    manageRequest(currentPlayer.clientRequest);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

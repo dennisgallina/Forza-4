@@ -20,7 +20,8 @@ public class Player extends Thread {
             // Continua a leggere le richieste dal client finché la socket non viene chiusa
             while (!connection.isClosed()) {
                 clientRequest = new ClientRequest(in.readLine()); // Gestisce la richiesta del client
-                System.out.println(clientRequest.toConsole());
+                if (clientRequest.command != null)
+                    System.out.println(clientRequest.toConsole());
             }
         } catch (IOException e) {
             e.printStackTrace();

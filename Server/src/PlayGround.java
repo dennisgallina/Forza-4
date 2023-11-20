@@ -115,9 +115,10 @@ public class PlayGround {
                 else if (COLOR_YELLOW.equals(pawn.color)) {
                     sb.append('2'); // Pedina gialla
                 }
+
+                // Aggiunge un carattere di nuova riga alla fine di ogni riga
+                sb.append(',');
             }
-            // Aggiunge un carattere di nuova riga alla fine di ogni riga
-            sb.append(';');
         }
         // Restituisce la stringa costruita
         return sb.toString();
