@@ -4,6 +4,8 @@ public class ServerResponse {
 
     public ServerResponse(String[] splittedDatFromServer) {
         this.command = splittedDatFromServer[0];
-        this.description = splittedDatFromServer[1];
+        
+        if (splittedDatFromServer.length > 1)
+            this.description = splittedDatFromServer[1];
     }
 }

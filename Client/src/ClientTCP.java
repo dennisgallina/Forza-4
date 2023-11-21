@@ -3,21 +3,25 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientTCP extends Thread {
     private Socket connection; // Connessione del Client
     private String serverIp; // IP del Server
-    private String serverPort; // Porta del Server
+    private int serverPort; // Porta del Server
     private BufferedReader input; // Ricezione Dati
     private PrintWriter output; // Invio Dati
     public RequestAtServer requestAtServer; // Richiesta al Server
     public List<ServerResponse> serverResponses; // Risposte ricevuta dal Server
 
     public ClientTCP(String serverIp, int serverPort) throws IOException {
-        this.connection = new Socket(serverIp, serverPort); // Aggiunta dei dati del Server
+        this.serverIp = serverIp;
+        this.serverPort = serverPort;
+        this.connection = new Socket(this.serverIp, this.serverPort); // Aggiunta dei dati del Server
         this.input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         this.output = new PrintWriter(connection.getOutputStream(), true);
+        this.serverResponses = new ArrayList<>();
     }
 
     public void run() {

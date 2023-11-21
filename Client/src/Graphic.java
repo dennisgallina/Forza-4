@@ -10,6 +10,8 @@ public class Graphic extends JFrame {
     public int buttonPawnPressedY;  // Coordinata Y della pedina premuta
     public int buttonPawnPressedX;  // Coordinata X della pedina premuta
 
+    // Aggiungi l'immagine a ogni finestra
+    private ImageIcon titleIcon = new ImageIcon("images/title.png");
     private JFrame gameFrame;  // Finestra principale del gioco
 
     // Costruttore
@@ -23,13 +25,37 @@ public class Graphic extends JFrame {
         this.gameFrame = new JFrame("Forza 4");  // Inizializza la finestra principale
     }
 
+    // Aggiungi l'immagine a ogni finestra
+    private void addImageToFrame(JFrame frame) {
+        JLabel backgroundLabel = new JLabel(titleIcon);
+        frame.add(backgroundLabel, BorderLayout.CENTER);
+    }
+
+    public void resetFrame() {
+        // Rimuovi tutti i componenti dalla content panel
+        gameFrame.getContentPane().removeAll();
+        gameFrame.getContentPane().revalidate();
+        gameFrame.getContentPane().repaint();
+    
+        // Reimposta le variabili di stato
+        buttonConnectPressed = false;
+        buttonDisconnectPressed = false;
+        buttonPawnPressed = false;
+        buttonPawnPressedY = -1;
+        buttonPawnPressedX = -1;
+    }
+
     // Mostra la Lobby
     public void showLobby() {
+        resetFrame();  // Ripristina la finestra
+
         updateTitle("Forza 4 - Lobby");  // Aggiorna il titolo della finestra
 
         gameFrame.setSize(600, 600);  // Imposta le dimensioni della finestra
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
         gameFrame.setVisible(true);  // Rende la finestra visibile
+
+        addImageToFrame(gameFrame);  // Aggiungi l'immagine al titolo
 
         JPanel contentPanel = new JPanel();  // Crea un pannello per il contenuto della finestra
         contentPanel.setLayout(new BorderLayout());  // Imposta il layout del pannello principale
@@ -37,6 +63,7 @@ public class Graphic extends JFrame {
         // Crea un pannello con il titolo
         JPanel titlePanel = new JPanel();
         titlePanel.setBackground(new Color(0, 102, 204));
+
 
         JLabel titleLabel = new JLabel("Benvenuto in Forza 4");
         titleLabel.setForeground(Color.WHITE);
@@ -60,9 +87,6 @@ public class Graphic extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Imposta la variabile di stato quando il pulsante viene premuto
                 buttonConnectPressed = true;
-
-                // Mostra un messaggio di avviso
-                JOptionPane.showMessageDialog(null, "ATTESA SERVER");
             }
         });
 
@@ -86,34 +110,48 @@ public class Graphic extends JFrame {
         gameFrame.setLocationRelativeTo(null);
     }
 
-    // Mostra la schermata di attesa
+    // Mostra la schermata di attesa con un aspetto moderno
     public void showWaitingScreen() {
+        resetFrame();  // Ripristina la finestra
+
         updateTitle("Forza 4 - Ricerca di un avversario");  // Aggiorna il titolo della finestra
 
-        gameFrame.setSize(500, 500);  // Imposta le dimensioni della finestra
+        gameFrame.setSize(800, 600);  // Imposta le dimensioni della finestra in modo più grande
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
         gameFrame.setVisible(true);  // Rende la finestra visibile
         gameFrame.setLayout(new BorderLayout());  // Imposta il layout della finestra
 
-        JLabel backgroundLabel = new JLabel();
-        gameFrame.add(backgroundLabel, BorderLayout.CENTER);
-        backgroundLabel.setLayout(new FlowLayout());
+        addImageToFrame(gameFrame);  // Aggiungi l'immagine al centro della finestra
 
-        JPanel textPanel = new JPanel();
-        textPanel.setBackground(new Color(192, 192, 192));
+        JPanel contentPanel = new JPanel(new BorderLayout());
+
+        // Pannello con il testo e la barra di attesa
+        JPanel textAndProgressBarPanel = new JPanel(new BorderLayout());
+        textAndProgressBarPanel.setBackground(new Color(240, 240, 240));
 
         JLabel waitingLabel = new JLabel("Attendere connessione...");
         waitingLabel.setForeground(Color.YELLOW);
-
         Font labelFont = waitingLabel.getFont();
         waitingLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, 20));
 
-        textPanel.add(waitingLabel);
-        backgroundLabel.add(textPanel);
+        textAndProgressBarPanel.add(waitingLabel, BorderLayout.NORTH);
+
+        JProgressBar progressBar = new JProgressBar();
+        progressBar.setIndeterminate(true);  // Barra di progresso indeterminata per indicare l'attesa
+        textAndProgressBarPanel.add(progressBar, BorderLayout.CENTER);
+
+        contentPanel.add(textAndProgressBarPanel, BorderLayout.CENTER);
+
+        gameFrame.setContentPane(contentPanel);  // Imposta il pannello principale come contenuto della finestra
+
+        gameFrame.pack();
+        gameFrame.setLocationRelativeTo(null);
     }
 
     // Mostra il campo da gioco
     public void showPlayGround(int rows, int columns, Pawn[][] pawns, String currentPlayerName) {
+        resetFrame();  // Ripristina la finestra
+
         updateTitle("Forza 4 - Partita");  // Aggiorna il titolo della finestra
 
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
@@ -156,6 +194,8 @@ public class Graphic extends JFrame {
             }
         }
 
+        addImageToFrame(gameFrame);  // Aggiungi l'immagine al centro della finestra
+
         gameFrame.add(boardPanel, BorderLayout.CENTER);
 
         JLabel statusLabel = new JLabel("Turno: " + currentPlayerName);
@@ -167,11 +207,15 @@ public class Graphic extends JFrame {
 
     // Mostra la schermata di disconnessione
     public void showDisconnect() {
+        resetFrame();  // Ripristina la finestra
+
         updateTitle("Forza 4 - Disconnesso");  // Aggiorna il titolo della finestra
 
         gameFrame.setSize(500, 500);  // Imposta le dimensioni della finestra
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
         gameFrame.setLayout(new BorderLayout());  // Imposta il layout della finestra
+
+        addImageToFrame(gameFrame);  // Aggiungi l'immagine al centro della finestra
 
         JLabel backgroundLabel = new JLabel();
         gameFrame.add(backgroundLabel, BorderLayout.CENTER);
@@ -190,11 +234,15 @@ public class Graphic extends JFrame {
 
     // Mostra la schermata di vincita/perdita
     public void showWinnerScreen() {
+        resetFrame();  // Ripristina la finestra
+
         updateTitle("Forza 4 - Esito Partita");  // Aggiorna il titolo della finestra
 
         gameFrame.setSize(500, 500);  // Imposta le dimensioni della finestra
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
         gameFrame.setLayout(new BorderLayout());  // Imposta il layout della finestra
+
+        addImageToFrame(gameFrame);  // Aggiungi l'immagine al centro della finestra
 
         JLabel backgroundLabel = new JLabel();
         gameFrame.add(backgroundLabel, BorderLayout.CENTER);
@@ -213,11 +261,15 @@ public class Graphic extends JFrame {
 
     // Mostra la schermata di fine gioco
     public void showFinishScreen() {
+        resetFrame();  // Ripristina la finestra
+
         updateTitle("Forza 4 - Partita Terminata");  // Aggiorna il titolo della finestra
 
         gameFrame.setSize(500, 500);  // Imposta le dimensioni della finestra
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
         gameFrame.setLayout(new BorderLayout());  // Imposta il layout della finestra
+
+        addImageToFrame(gameFrame);  // Aggiungi l'immagine al centro della finestra
 
         JLabel backgroundLabel = new JLabel();
         gameFrame.add(backgroundLabel, BorderLayout.CENTER);

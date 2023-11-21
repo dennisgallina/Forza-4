@@ -15,9 +15,10 @@ public class Game {
         this.currentPlayerName = "Player 1";
     }
 
-    public void start() throws IOException {
+    public void start() throws IOException, InterruptedException {
         // Fase di attesa dell'avverario
         while (!state) {
+            Thread.sleep(100);
             if (clientTCP.haveResponsesFromServer()) // Controlla ci siano risposte dal Server in coda
                 manageResponse();
         }
@@ -47,6 +48,9 @@ public class Game {
         ServerResponse serverResponse = clientTCP.getOldResponse();
         // Gestione del comando ricevuto dal Server
         switch (serverResponse.command) {
+            case "connection accepted":
+                clientTCP.removeOldResponse();
+                break;
             // Attesa dell'avversario
             case "wait":
                 graphic.showWaitingScreen(); // Visualizza la schermata di attesa dell'avversario
