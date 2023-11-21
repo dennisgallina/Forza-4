@@ -33,7 +33,13 @@ public class Game extends Thread {
         currentPlayer.clientRequest = null;
         // Continua a eseguire il gioco finché la partita è attiva ed entrambi i giocatori sono connessi
         while (this.state == true && state && player1.isAlive() && player2.isAlive()) {
-
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
             try {
                 if (currentPlayer.clientRequest != null)
                     manageRequest(currentPlayer.clientRequest);
