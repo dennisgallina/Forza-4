@@ -1,7 +1,9 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class Graphic extends JFrame {
     private boolean buttonConnectPressed;  // Variabile di stato per il pulsante "Connetti"
@@ -11,7 +13,7 @@ public class Graphic extends JFrame {
     public int buttonPawnPressedX;  // Coordinata X della pedina premuta
 
     // Aggiungi l'immagine a ogni finestra
-    private ImageIcon titleIcon = new ImageIcon("images/title.png");
+    private ImageIcon titleIcon = new ImageIcon("images/sfondo.jpg");
     private JFrame gameFrame;  // Finestra principale del gioco
 
     // Costruttore
@@ -48,70 +50,79 @@ public class Graphic extends JFrame {
     // Mostra la Lobby
     public void showLobby() {
         resetFrame();  // Ripristina la finestra
-
         updateTitle("Forza 4 - Lobby");  // Aggiorna il titolo della finestra
 
-        gameFrame.setSize(600, 600);  // Imposta le dimensioni della finestra
-        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
-        gameFrame.setVisible(true);  // Rende la finestra visibile
+        JButton btnGioca;
 
-        addImageToFrame(gameFrame);  // Aggiungi l'immagine al titolo
+        // Imposta le dimensioni dello schermo a 1920x1080
+        gameFrame.setSize(1920, 1080);
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel contentPanel = new JPanel();  // Crea un pannello per il contenuto della finestra
-        contentPanel.setLayout(new BorderLayout());  // Imposta il layout del pannello principale
+        // Imposta lo sfondo con l'immagine sfondo.jpg direttamente sul ContentPane
+        try {
+            ClassLoader classLoader = getClass().getClassLoader();
+            gameFrame.setContentPane(new JLabel(new ImageIcon(ImageIO.read(classLoader.getResourceAsStream("images/sfondo.jpg")))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        // Crea un pannello con il titolo
-        JPanel titlePanel = new JPanel();
-        titlePanel.setBackground(new Color(0, 102, 204));
+        // Crea il bottone "PLAY!!" e imposta le dimensioni
+        btnGioca = new JButton("PLAY!!");
+        btnGioca.setPreferredSize(new Dimension(200, 50));
 
+        // Imposta la dimensione del testo in grassetto e più grande
+        Font buttonFont = new Font(btnGioca.getFont().getName(), Font.BOLD, 24);
+        btnGioca.setFont(buttonFont);
 
-        JLabel titleLabel = new JLabel("Benvenuto in Forza 4");
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-
-        titlePanel.add(titleLabel);
-        contentPanel.add(titlePanel, BorderLayout.NORTH);
-
-        // Crea un pannello per il pulsante con uno sfondo grigio chiaro
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(new Color(240, 240, 240));
-
-        // Crea un pulsante con la scritta "GIOCA" in blu e dimensioni specifiche
-        JButton playButton = new JButton("GIOCA");
-        playButton.setForeground(new Color(0, 102, 204));  // Colore blu
-        playButton.setPreferredSize(new Dimension(150, 50));
-
-        // Aggiungi un ascoltatore per gestire l'azione del pulsante
-        playButton.addActionListener(new ActionListener() {
+        // Aggiungi un listener per gestire il clic sul pulsante
+        btnGioca.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Imposta la variabile di stato quando il pulsante viene premuto
+                // Quando il pulsante viene premuto, ritorna true
                 buttonConnectPressed = true;
             }
         });
 
-        // Aggiungi il pulsante al pannello
-        buttonPanel.add(playButton);
+        // Posiziona il pulsante utilizzando i margini
+        Insets insets = getInsets();
+        btnGioca.setMargin(new Insets(insets.top + 10, 10, 10, 10));
 
-        // Aggiungi il pannello del pulsante al pannello principale
-        contentPanel.add(buttonPanel, BorderLayout.CENTER);
+        // Imposta il layout manager del ContentPane a null
+        gameFrame.setLayout(null);
 
-        // Crea un pannello decorativo
-        JPanel decorationPanel = new JPanel();
-        decorationPanel.setBackground(new Color(0, 102, 204));
+        // Centra il pulsante orizzontalmente
+        Dimension size = btnGioca.getPreferredSize();
+        btnGioca.setBounds((gameFrame.getWidth() - size.width) / 2, insets.top, size.width, size.height);
 
-        contentPanel.add(decorationPanel, BorderLayout.SOUTH);
+        // Aggiungi il bottone direttamente al ContentPane
+        gameFrame.add(btnGioca);
 
-        // Imposta il pannello principale come contenuto della finestra della lobby
-        gameFrame.setContentPane(contentPanel);
+        // Aggiungi un Timer per cambiare costantemente il colore del pulsante
+        Timer colorTimer = new Timer(100, new ActionListener() {
+            float hue = 0; // Hue iniziale
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Cambia gradualmente il colore
+                hue = (hue + 0.01f) % 1.0f;
+                Color newColor = Color.getHSBColor(hue, 1, 1);
+                btnGioca.setForeground(newColor);
+            }
+        });
+
+        // Avvia il timer
+        colorTimer.start();
 
         // Imposta le proprietà della finestra
         gameFrame.pack();
         gameFrame.setLocationRelativeTo(null);
+
+        // Rendi la finestra visibile dopo aver applicato tutte le modifiche
+        gameFrame.setVisible(true);
     }
 
-    // Mostra la schermata di attesa con un aspetto moderno
-    public void showWaitingScreen() {
+     // Mostra la schermata di attesa con un aspetto moderno
+     public void showWaitingScreen() {
         resetFrame();  // Ripristina la finestra
 
         updateTitle("Forza 4 - Ricerca di un avversario");  // Aggiorna il titolo della finestra
