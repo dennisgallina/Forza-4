@@ -130,7 +130,7 @@ public class Graphic extends JFrame {
         textAndProgressBarPanel.setBackground(new Color(240, 240, 240));
 
         JLabel waitingLabel = new JLabel("Attendere connessione...");
-        waitingLabel.setForeground(Color.YELLOW);
+        waitingLabel.setForeground(Color.BLUE);
         Font labelFont = waitingLabel.getFont();
         waitingLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, 20));
 
