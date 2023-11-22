@@ -17,8 +17,8 @@ public class ServerTCP {
         Socket socket = serverSocket.accept();  // Accetta la connessione
         System.out.println("Richiesta del Client " + socket.getInetAddress().toString() + ":connect");
         if (connectionsManager.add(socket))
-            send("connection accepted", socket);
-        return socket;
+            return socket;
+        return null;
     }
 
     // Invia un messaggio a un Client specifico

@@ -41,8 +41,11 @@ public class Game extends Thread {
             }
             
             try {
-                if (currentPlayer.clientRequest != null)
+                if (currentPlayer.clientRequest != null) {
                     manageRequest(currentPlayer.clientRequest);
+                    currentPlayer.clearRequest();
+                }
+
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -58,9 +61,9 @@ public class Game extends Thread {
         switch (clientRequest.command) {
             case "insert": // Richiede l'inserimento di una Pawn
                 if (currentPlayer.equals(player1))
-                    serverTCP.sendAtAll(player2.name);
+                    serverTCP.sendAtAll("turn;" + player2.name);
                 else
-                    serverTCP.sendAtAll(player1.name);
+                    serverTCP.sendAtAll("turn;" + player1.name);
 
                 playGround.insert(currentPlayer.pawnsColor, clientRequest.positionX); // Inserisce la Pawn
                 serverTCP.sendAtAll(playGround.getPawns()); // Comunica lo stato del gioco a tutti i client

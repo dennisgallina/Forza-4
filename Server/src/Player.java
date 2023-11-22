@@ -19,12 +19,20 @@ public class Player extends Thread {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             // Continua a leggere le richieste dal client finché la socket non viene chiusa
             while (!connection.isClosed()) {
+                Thread.sleep(100);
                 clientRequest = new ClientRequest(in.readLine()); // Gestisce la richiesta del client
                 if (clientRequest.command != null)
                     System.out.println(clientRequest.toConsole());
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+    }
+
+    public void clearRequest() {
+        clientRequest = null;
     }    
 }

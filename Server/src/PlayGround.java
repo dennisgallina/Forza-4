@@ -32,58 +32,69 @@ public class PlayGround {
         return columnHeights[positionX] >= rows;
     }
 
-    // Questo metodo controlla se un giocatore ha vinto
     public String checkWin() {
-        // Scorre tutte le pedine
-        for (Pawn[] row : pawns) {
-            for (Pawn pawn : row) {
-                if (pawn != null) {
-                    String color = pawn.color;
-                    int posX = pawn.positionX;
-                    int posY = pawn.positionY;
-
-                    // Controlla se ci sono 4 pedine dello stesso colore in fila orizzontalmente
-                    if (checkLine(color, posX, posY, 1, 0) >= 4) {
-                        return color;
-                    }
-
-                    // Controlla se ci sono 4 pedine dello stesso colore in fila verticalmente
-                    if (checkLine(color, posX, posY, 0, 1) >= 4) {
-                        return color;
-                    }
-
-                    // Controlla se ci sono 4 pedine dello stesso colore in fila diagonalmente da sinistra a destra
-                    if (checkLine(color, posX, posY, 1, 1) >= 4) {
-                        return color;
-                    }
-
-                    // Controlla se ci sono 4 pedine dello stesso colore in fila diagonalmente da destra a sinistra
-                    if (checkLine(color, posX, posY, 1, -1) >= 4) {
-                        return color;
-                    }
+        // Controlla le vittorie nelle colonne
+        for (int x = 0; x < columns; x++) {
+            for (int y = 0; y <= rows - 4; y++) {
+                if (checkLine(x, y, 0, 1, 4)) {
+                    return getNonEmptyColor(x, y); // Vittoria trovata
                 }
             }
         }
-        // Se nessuna delle condizioni sopra è vera, nessun giocatore ha vinto
-        return null;
-    }
-
-    // Controlla se ci sono 4 pedine dello stesso colore in fila in una certa direzione
-    private int checkLine(String color, int posX, int posY, int dirX, int dirY) {
-        int count = 0;
-        // Controlla le 4 posizioni nella direzione specificata
-        for (int i = 0; i < 4; i++) {
-            // Se la pedina in questa posizione è dello stesso colore, incrementa il contatore
-            if (getPawn(posX + dirX * i, posY + dirY * i).color.equals(color)) {
-                count++;
-            } else {
-                // Se la pedina non è dello stesso colore, interrompe il ciclo
-                break;
+    
+        // Controlla le vittorie nelle righe
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x <= columns - 4; x++) {
+                if (checkLine(x, y, 1, 0, 4)) {
+                    return getNonEmptyColor(x, y); // Vittoria trovata
+                }
             }
         }
-        // Restituisce il numero di pedine dello stesso colore in fila
-        return count;
+    
+        // Controlla le vittorie nelle diagonali (\)
+        for (int x = 0; x <= columns - 4; x++) {
+            for (int y = 0; y <= rows - 4; y++) {
+                if (checkLine(x, y, 1, 1, 4)) {
+                    return getNonEmptyColor(x, y); // Vittoria trovata
+                }
+            }
+        }
+    
+        // Controlla le vittorie nelle diagonali (/)
+        for (int x = 3; x < columns; x++) {
+            for (int y = 0; y <= rows - 4; y++) {
+                if (checkLine(x, y, -1, 1, 4)) {
+                    return getNonEmptyColor(x, y); // Vittoria trovata
+                }
+            }
+        }
+    
+        return null; // Nessuna vittoria trovata
     }
+    
+    // Metodo di supporto per ottenere il colore alla posizione specificata
+    private String getNonEmptyColor(int posX, int posY) {
+        Pawn pawn = getPawn(posX, posY);
+        return (pawn != null) ? pawn.color : null;
+    }
+    
+    // Metodo di supporto per verificare una linea di pedine
+    private boolean checkLine(int startX, int startY, int deltaX, int deltaY, int length) {
+        String color = getNonEmptyColor(startX, startY);
+    
+        if (color == null) {
+            return false; // La posizione iniziale è vuota
+        }
+    
+        for (int i = 0; i < length; i++) {
+            String currentColor = getNonEmptyColor(startX + i * deltaX, startY + i * deltaY);
+            if (currentColor == null || !color.equals(currentColor)) {
+                return false; // La linea non è continua o contiene pedine di colore diverso
+            }
+        }
+        return true; // La linea contiene pedine dello stesso colore
+    }
+    
 
     // Restituisce la pedina in una certa posizione
     private Pawn getPawn(int posX, int posY) {
