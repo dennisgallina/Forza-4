@@ -5,6 +5,7 @@ public class Game {
     public boolean state; // Stato della partita: true -> game in corso, false -> game non iniziato/finito
     public Graphic graphic; // Grafica della partita
     public PlayGround playGround; // Griglia di gioco
+    public String playerName;
     public String currentPlayerName; // Nome del giocatore del turno corrente
 
     public Game(Graphic graphic, ClientTCP clientTCP) throws IOException {
@@ -25,6 +26,7 @@ public class Game {
 
         // Mentre il Game è in corso
         while (state == true) {
+            Thread.sleep(100);
             // Richiede di inserire una pedina
             if (graphic.isButtonPawnPressed()) 
                 clientTCP.send(new RequestAtServer("insert", graphic.buttonPawnPressedX)); // Invia la richiesta al Server
@@ -49,6 +51,7 @@ public class Game {
         // Gestione del comando ricevuto dal Server
         switch (serverResponse.command) {
             case "connection accepted":
+                this.playerName = serverResponse.description; 
                 clientTCP.removeOldResponse();
                 break;
             // Attesa dell'avversario
@@ -69,7 +72,7 @@ public class Game {
             case "refresh":
                 String[] pawns = serverResponse.description.split(","); // Pawns sono divise dalla virgola
                 insertPawns(pawns); // Inserisce le Pawns nel campo da gioco
-                graphic.showPlayGround(playGround.rows, playGround.columns, playGround.pawns, currentPlayerName); //Visualizza il campo da gioco
+                graphic.showPlayGround(playGround.rows, playGround.columns, playGround.pawns, playerName, currentPlayerName); //Visualizza il campo da gioco
                 clientTCP.removeOldResponse();
                 break;
             // Fine Game 

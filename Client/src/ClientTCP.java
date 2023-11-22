@@ -28,9 +28,13 @@ public class ClientTCP extends Thread {
         // Resta in ascolto del Server finché la Connessione è attiva
         while (isConnected()) {
             try {
+                Thread.sleep(100);
                 String dataFromServer = input.readLine(); // Riceve dati dal Server 
                 manageDataFromServer(dataFromServer); // Gestisce i dati ricevuti dal Server
             } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             } 

@@ -14,8 +14,8 @@ public class RequestAtServer {
 
     public String toString() {
         if (positionX == -1)
-            return command + ";" + positionX;
-        else
             return command;
+        else
+            return command + ";" + positionX;
     }
 }
