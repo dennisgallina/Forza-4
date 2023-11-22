@@ -67,7 +67,7 @@ public class Graphic extends JFrame {
         }
 
         // Crea il bottone "PLAY!!" e imposta le dimensioni
-        btnGioca = new JButton("PLAY!!");
+        btnGioca = new JButton("GIOCA");
         btnGioca.setPreferredSize(new Dimension(200, 50));
 
         // Imposta la dimensione del testo in grassetto e più grande
@@ -122,7 +122,7 @@ public class Graphic extends JFrame {
     }
 
      // Mostra la schermata di attesa con un aspetto moderno
-     public void showWaitingScreen() {
+    public void showWaitingScreen() {
         resetFrame();  // Ripristina la finestra
 
         updateTitle("Forza 4 - Ricerca di un avversario");  // Aggiorna il titolo della finestra
@@ -140,7 +140,7 @@ public class Graphic extends JFrame {
         JPanel textAndProgressBarPanel = new JPanel(new BorderLayout());
         textAndProgressBarPanel.setBackground(new Color(240, 240, 240));
 
-        JLabel waitingLabel = new JLabel("Attendere connessione...");
+        JLabel waitingLabel = new JLabel("RICERCA DI UN AVVERSARIO IN CORSO");
         waitingLabel.setForeground(Color.BLUE);
         Font labelFont = waitingLabel.getFont();
         waitingLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, 20));
@@ -160,16 +160,16 @@ public class Graphic extends JFrame {
     }
 
     // Mostra il campo da gioco
-    public void showPlayGround(int rows, int columns, Pawn[][] pawns, String currentPlayerName) {
+    public void showPlayGround(int rows, int columns, Pawn[][] pawns, String playerName, String currentPlayerName) {
         resetFrame();  // Ripristina la finestra
-
+    
         updateTitle("Forza 4 - Partita");  // Aggiorna il titolo della finestra
-
+    
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
-
+    
         char[][] board = new char[rows][columns];
         JButton[][] buttons = new JButton[rows][columns];
-
+    
         JPanel boardPanel = new JPanel(new GridLayout(rows, columns));
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
@@ -204,17 +204,23 @@ public class Graphic extends JFrame {
                 });
             }
         }
-
+    
         addImageToFrame(gameFrame);  // Aggiungi l'immagine al centro della finestra
-
+    
+        // Aggiungi un'etichetta per il nome del giocatore sopra la scacchiera
+        JLabel playerNameLabel = new JLabel("Giocatore: " + playerName);
+        playerNameLabel.setHorizontalAlignment(JLabel.CENTER);  // Allinea il testo al centro
+        gameFrame.add(playerNameLabel, BorderLayout.NORTH);
+    
         gameFrame.add(boardPanel, BorderLayout.CENTER);
-
+    
         JLabel statusLabel = new JLabel("Turno: " + currentPlayerName);
         gameFrame.add(statusLabel, BorderLayout.SOUTH);
-
+    
         gameFrame.pack();
         gameFrame.setLocationRelativeTo(null);
     }
+    
 
     // Mostra la schermata di disconnessione
     public void showDisconnect() {
