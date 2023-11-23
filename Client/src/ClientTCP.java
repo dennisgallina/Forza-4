@@ -52,7 +52,7 @@ public class ClientTCP extends Thread {
 
     // Invia la richiesta al Server
     public void send(RequestAtServer requestAtServer) throws IOException {
-        System.out.println("Risposta da Server " + serverIp + ":" + requestAtServer.toString());
+        System.out.println("Richiesta al Server " + serverIp + ":" + requestAtServer.toString());
         output.println(requestAtServer.toString());
     }
 

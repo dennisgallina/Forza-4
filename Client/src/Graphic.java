@@ -1,20 +1,17 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
 public class Graphic extends JFrame {
     private boolean buttonConnectPressed;  // Variabile di stato per il pulsante "Connetti"
     private boolean buttonDisconnectPressed;  // Variabile di stato per il pulsante "Disconnetti"
-    private boolean buttonPawnPressed;  // Variabile di stato per il pulsante "Pedina"
+    public boolean buttonPawnPressed;  // Variabile di stato per il pulsante "Pedina"
     public int buttonPawnPressedY;  // Coordinata Y della pedina premuta
     public int buttonPawnPressedX;  // Coordinata X della pedina premuta
 
     // Aggiungi l'immagine a ogni finestra
-    private ImageIcon titleIcon = new ImageIcon("images/sfondo.jpg");
+    private ImageIcon titleIcon = new ImageIcon("images/title.png");
     private JFrame gameFrame;  // Finestra principale del gioco
 
     // Costruttore
@@ -51,78 +48,69 @@ public class Graphic extends JFrame {
     // Mostra la Lobby
     public void showLobby() {
         resetFrame();  // Ripristina la finestra
+
         updateTitle("Forza 4 - Lobby");  // Aggiorna il titolo della finestra
 
-        JButton btnGioca;
+        gameFrame.setSize(600, 600);  // Imposta le dimensioni della finestra
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
+        gameFrame.setVisible(true);  // Rende la finestra visibile
 
-        // Imposta le dimensioni dello schermo a 1920x1080
-        gameFrame.setSize(1920, 1080);
-        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addImageToFrame(gameFrame);  // Aggiungi l'immagine al titolo
 
-        // Imposta lo sfondo con l'immagine sfondo.jpg direttamente sul ContentPane
-        try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            gameFrame.setContentPane(new JLabel(new ImageIcon(ImageIO.read(classLoader.getResourceAsStream("images/sfondo.jpg")))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        JPanel contentPanel = new JPanel();  // Crea un pannello per il contenuto della finestra
+        contentPanel.setLayout(new BorderLayout());  // Imposta il layout del pannello principale
 
-        // Crea il bottone "PLAY!!" e imposta le dimensioni
-        btnGioca = new JButton("GIOCA");
-        btnGioca.setPreferredSize(new Dimension(200, 50));
+        // Crea un pannello con il titolo
+        JPanel titlePanel = new JPanel();
+        titlePanel.setBackground(new Color(0, 102, 204));
 
-        // Imposta la dimensione del testo in grassetto e più grande
-        Font buttonFont = new Font(btnGioca.getFont().getName(), Font.BOLD, 24);
-        btnGioca.setFont(buttonFont);
 
-        // Aggiungi un listener per gestire il clic sul pulsante
-        btnGioca.addActionListener(new ActionListener() {
+        JLabel titleLabel = new JLabel("Benvenuto in Forza 4");
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+
+        titlePanel.add(titleLabel);
+        contentPanel.add(titlePanel, BorderLayout.NORTH);
+
+        // Crea un pannello per il pulsante con uno sfondo grigio chiaro
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(new Color(240, 240, 240));
+
+        // Crea un pulsante con la scritta "GIOCA" in blu e dimensioni specifiche
+        JButton playButton = new JButton("GIOCA");
+        playButton.setForeground(new Color(0, 102, 204));  // Colore blu
+        playButton.setPreferredSize(new Dimension(150, 50));
+
+        // Aggiungi un ascoltatore per gestire l'azione del pulsante
+        playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Quando il pulsante viene premuto, ritorna true
+                // Imposta la variabile di stato quando il pulsante viene premuto
                 buttonConnectPressed = true;
             }
         });
 
-        // Posiziona il pulsante utilizzando i margini
-        Insets insets = getInsets();
-        btnGioca.setMargin(new Insets(insets.top + 10, 10, 10, 10));
+        // Aggiungi il pulsante al pannello
+        buttonPanel.add(playButton);
 
-        // Imposta il layout manager del ContentPane a null
-        gameFrame.setLayout(null);
+        // Aggiungi il pannello del pulsante al pannello principale
+        contentPanel.add(buttonPanel, BorderLayout.CENTER);
 
-        // Centra il pulsante orizzontalmente
-        Dimension size = btnGioca.getPreferredSize();
-        btnGioca.setBounds((gameFrame.getWidth() - size.width) / 2, insets.top, size.width, size.height);
+        // Crea un pannello decorativo
+        JPanel decorationPanel = new JPanel();
+        decorationPanel.setBackground(new Color(0, 102, 204));
 
-        // Aggiungi il bottone direttamente al ContentPane
-        gameFrame.add(btnGioca);
+        contentPanel.add(decorationPanel, BorderLayout.SOUTH);
 
-        // Aggiungi un Timer per cambiare costantemente il colore del pulsante
-        Timer colorTimer = new Timer(100, new ActionListener() {
-            float hue = 0; // Hue iniziale
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Cambia gradualmente il colore
-                hue = (hue + 0.01f) % 1.0f;
-                Color newColor = Color.getHSBColor(hue, 1, 1);
-                btnGioca.setForeground(newColor);
-            }
-        });
-
-        // Avvia il timer
-        colorTimer.start();
+        // Imposta il pannello principale come contenuto della finestra della lobby
+        gameFrame.setContentPane(contentPanel);
 
         // Imposta le proprietà della finestra
         gameFrame.pack();
         gameFrame.setLocationRelativeTo(null);
-
-        // Rendi la finestra visibile dopo aver applicato tutte le modifiche
-        gameFrame.setVisible(true);
     }
 
-     // Mostra la schermata di attesa con un aspetto moderno
+    // Mostra la schermata di attesa con un aspetto moderno
     public void showWaitingScreen() {
         resetFrame();  // Ripristina la finestra
 
@@ -221,58 +209,36 @@ public class Graphic extends JFrame {
         gameFrame.pack();
         gameFrame.setLocationRelativeTo(null);
     }
-    
 
     // Mostra la schermata di disconnessione
     public void showDisconnect() {
-        // Ripristina la finestra
-        // (Se il metodo resetFrame() è definito altrove nel codice, commenta questa riga)
+        resetFrame();  // Ripristina la finestra
 
-        // Aggiorna il titolo della finestra
-        updateTitle("Forza 4 - Disconnesso");
+        updateTitle("Forza 4 - Disconnesso");  // Aggiorna il titolo della finestra
 
-        // Imposta le dimensioni della finestra
-        gameFrame.setSize(1920, 1080);
+        gameFrame.setSize(500, 500);  // Imposta le dimensioni della finestra
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
+        gameFrame.setLayout(new BorderLayout());  // Imposta il layout della finestra
 
-        // Imposta l'operazione di chiusura della finestra
-        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addImageToFrame(gameFrame);  // Aggiungi l'immagine al centro della finestra
 
-        // Imposta il layout della finestra
-        gameFrame.setLayout(new BorderLayout());
+        JLabel backgroundLabel = new JLabel();
+        gameFrame.add(backgroundLabel, BorderLayout.CENTER);
+        backgroundLabel.setLayout(new FlowLayout());
 
-        try {
-            // Carica l'immagine di sfondo
-            File imgFile = new File("images/sfondo.jpg");
-            Image backgroundImage = ImageIO.read(imgFile);
+        JPanel textPanel = new JPanel();
+        textPanel.setBackground(new Color(192, 192, 192));
 
-            // Crea un JLabel con l'immagine di sfondo
-            JLabel backgroundLabel = new JLabel(new ImageIcon(backgroundImage));
-            gameFrame.add(backgroundLabel, BorderLayout.CENTER);
-            backgroundLabel.setLayout(new FlowLayout());
+        JLabel disconnectedLabel = new JLabel("L'avversario si è disconnesso.");
+        disconnectedLabel.setForeground(Color.YELLOW);
+        disconnectedLabel.setFont(new Font(disconnectedLabel.getFont().getName(), Font.PLAIN, 24));
 
-            // Crea il pannello del testo
-            JPanel textPanel = new JPanel();
-            textPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-            textPanel.setOpaque(false);
-
-            // Crea la JLabel con la scritta ancora più grande e bianca
-            JLabel disconnectedLabel = new JLabel("<html><font color='white' size='9'><b>L'AVVERSARIO SI È DISCONNESSO!!</b></font></html>");
-
-            textPanel.add(disconnectedLabel);
-
-            // Aggiungi il pannello del testo al JLabel di sfondo
-            backgroundLabel.add(textPanel);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Rendi la finestra visibile
-        gameFrame.setVisible(true);
+        textPanel.add(disconnectedLabel);
+        backgroundLabel.add(textPanel);
     }
 
     // Mostra la schermata di vincita/perdita
-    public void showWinnerScreen() {
+    public void showWinnerScreen(String player, String WinnerPlayer) {
         resetFrame();  // Ripristina la finestra
 
         updateTitle("Forza 4 - Esito Partita");  // Aggiorna il titolo della finestra
@@ -290,7 +256,12 @@ public class Graphic extends JFrame {
         JPanel textPanel = new JPanel();
         textPanel.setBackground(new Color(192, 192, 192));
 
-        JLabel winnerLabel = new JLabel("HAI VINTO!");
+        JLabel winnerLabel = new JLabel();
+        if (player.equals(WinnerPlayer))
+            winnerLabel = new JLabel("HAI VINTO!");
+        else if (!player.equals(WinnerPlayer))
+            winnerLabel = new JLabel("HAI PERSO!");
+            
         winnerLabel.setForeground(Color.YELLOW);
         winnerLabel.setFont(new Font(winnerLabel.getFont().getName(), Font.PLAIN, 24));
 

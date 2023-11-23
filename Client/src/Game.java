@@ -28,8 +28,10 @@ public class Game {
         while (state == true) {
             Thread.sleep(100);
             // Richiede di inserire una pedina
-            if (graphic.isButtonPawnPressed()) 
+            if (graphic.isButtonPawnPressed()) {
                 clientTCP.send(new RequestAtServer("insert", graphic.buttonPawnPressedX)); // Invia la richiesta al Server
+                graphic.buttonPawnPressed = false;
+            }
 
             // Richiede di disconnettersi
             if (graphic.isButtonDiconnectPressed()) {
@@ -68,6 +70,7 @@ public class Game {
             case "turn":
                 currentPlayerName = serverResponse.description;
                 clientTCP.removeOldResponse();
+                break;
             // Aggiornamento del PlayGround
             case "refresh":
                 String[] pawns = serverResponse.description.split(","); // Pawns sono divise dalla virgola
@@ -83,8 +86,7 @@ public class Game {
                 break;
             // Esito vincitore, di conseguenza fine Game
             case "winner":
-                this.state = false;
-                graphic.showWinnerScreen(); 
+                graphic.showWinnerScreen(playerName, serverResponse.description); 
                 clientTCP.removeOldResponse();
                 break;
             // Non riconosciuto
@@ -99,8 +101,9 @@ public class Game {
 
     // Inserisce le Pawns ricevute dal Server: 0 -> Pawn non presente, 1 -> Pawn red, 2 -> Pawn yellow
     public void insertPawns(String[] pawns) {
+        int countPawns = 0;
         for (int row = 0; row < playGround.rows; row++) { // Scorre le righe dal basso verso l'alto 
-            for (int column = 0, countPawns = 0; column < playGround.columns; column++, countPawns++) { // Scorre le colonne della riga
+            for (int column = 0; column < playGround.columns; column++, countPawns++) { // Scorre le colonne della riga
                 if (pawns[countPawns].equals("1")) {
                     playGround.insert(new Pawn("red", column, row)); // Inserimento Pawn red
                 } else if (pawns[countPawns].equals("2"))
