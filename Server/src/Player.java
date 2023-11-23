@@ -22,7 +22,7 @@ public class Player extends Thread {
                 Thread.sleep(100);
                 clientRequest = new ClientRequest(in.readLine()); // Gestisce la richiesta del client
                 if (clientRequest.command != null)
-                    System.out.println(clientRequest.toConsole());
+                    System.out.println("Richiesta del Client" + connection.getInetAddress().toString() + ":" + clientRequest.toConsole());
             }
         } catch (IOException e) {
             e.printStackTrace();

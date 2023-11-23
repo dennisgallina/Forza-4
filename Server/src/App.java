@@ -10,7 +10,7 @@ public class App {
         while (connectionPlayer1 == null) 
             connectionPlayer1 = serverTCP.acceptConnection();
 
-        serverTCP.send("connection accepted; Player 1", connectionPlayer1);
+        serverTCP.send("connection accepted;Player 1", connectionPlayer1);
         
         Player player1 = new Player("Player 1", "red", connectionPlayer1); // Creazione del Player 1
         serverTCP.send("wait", connectionPlayer1); // Tiene il giocatore in attesa fino alla connessione dell'avversario
@@ -20,7 +20,7 @@ public class App {
         while (connectionPlayer2 == null)  
             connectionPlayer2 = serverTCP.acceptConnection();
             
-        serverTCP.send("connection accepted; Player 2", connectionPlayer2);
+        serverTCP.send("connection accepted;Player 2", connectionPlayer2);
         
         Player player2 = new Player("Player 2", "yellow", connectionPlayer2); // Creazione del Player 2
 

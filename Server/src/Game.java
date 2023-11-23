@@ -49,6 +49,9 @@ public class Game extends Thread {
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
         }
 
@@ -57,7 +60,7 @@ public class Game extends Thread {
     } 
 
     // Gestione del comando richisto
-    private void manageRequest(ClientRequest clientRequest) throws IOException {
+    private void manageRequest(ClientRequest clientRequest) throws IOException, InterruptedException {
         switch (clientRequest.command) {
             case "insert": // Richiede l'inserimento di una Pawn
                 if (currentPlayer.equals(player1))
@@ -65,15 +68,17 @@ public class Game extends Thread {
                 else
                     serverTCP.sendAtAll("turn;" + player1.name);
 
+                Thread.sleep(100);
+                
                 playGround.insert(currentPlayer.pawnsColor, clientRequest.positionX); // Inserisce la Pawn
-                serverTCP.sendAtAll(playGround.getPawns()); // Comunica lo stato del gioco a tutti i client
+                serverTCP.sendAtAll("refresh;" + playGround.getPawns()); // Comunica lo stato del gioco a tutti i client
 
                 // Verifica se c'è un vincitore
                 if (playGround.checkWin() == null) {}
                 else if (playGround.checkWin().equals("red")) 
-                    serverTCP.sendAtAll("winner;red"); // Comunica il vincitore a tutti i client
+                    serverTCP.sendAtAll("winner;Player 1"); // Comunica il vincitore a tutti i client
                 else if (playGround.checkWin().equals("yellow"))
-                    serverTCP.sendAtAll("winner;yellow"); // Comunica il vincitore a tutti i client
+                    serverTCP.sendAtAll("winner;Player 2"); // Comunica il vincitore a tutti i client
                 
                 currentPlayer = (currentPlayer == player1) ? player2 : player1; // Cambia turno
                 break;

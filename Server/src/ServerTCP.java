@@ -25,6 +25,7 @@ public class ServerTCP {
     public void send(String message, Socket connection) throws IOException {
         PrintWriter out = new PrintWriter(connection.getOutputStream(), true); // Crea un PrintWriter per inviare dati al client
         out.println(message);  // Invia il messaggio al client
+        System.out.println("Risposta inviata al Client " + connection.getInetAddress() + ":" + message);
     }
 
     // Invia un messaggio a tutti i client

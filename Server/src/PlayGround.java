@@ -108,12 +108,14 @@ public class PlayGround {
     public String getPawns() {
         // Crea un StringBuilder per costruire la stringa
         StringBuilder sb = new StringBuilder();
-        // Scorre le righe del campo da gioco dal basso verso l'alto
-        for (int y = 0; y < rows; y++) {
+        
+        // Scorre le righe del campo da gioco dall'alto verso il basso
+        for (int y = rows - 1; y >= 0; y--) {
             // Scorre le colonne del campo da gioco da sinistra a destra
             for (int x = 0; x < columns; x++) {
                 // Ottiene la pedina nella posizione corrente
                 Pawn pawn = getPawn(x, y);
+                
                 // Se la posizione è vuota, aggiunge '0' alla stringa
                 if (pawn == null) {
                     sb.append('0'); // Casella vuota
@@ -126,12 +128,12 @@ public class PlayGround {
                 else if (COLOR_YELLOW.equals(pawn.color)) {
                     sb.append('2'); // Pedina gialla
                 }
-
-                // Aggiunge un carattere di nuova riga alla fine di ogni riga
-                sb.append(',');
+    
+                sb.append(','); // Aggiunge un separatore di Pawn
             }
         }
+        
         // Restituisce la stringa costruita
         return sb.toString();
-    }
+    }    
 }

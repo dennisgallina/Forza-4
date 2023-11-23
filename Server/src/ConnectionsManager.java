@@ -11,11 +11,9 @@ public class ConnectionsManager {
     }
 
     public boolean add(Socket socket) {
-        for (Socket connection : connections) {
-            if (connection.equals(socket))
-                return false;
-        }
-
+        if (socket == null)
+            return false;
+            
         connections.add(socket);
         return true;
     }
