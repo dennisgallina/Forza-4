@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 
 public class Graphic extends JFrame {
@@ -224,29 +225,50 @@ public class Graphic extends JFrame {
 
     // Mostra la schermata di disconnessione
     public void showDisconnect() {
-        resetFrame();  // Ripristina la finestra
+        // Ripristina la finestra
+        // (Se il metodo resetFrame() è definito altrove nel codice, commenta questa riga)
 
-        updateTitle("Forza 4 - Disconnesso");  // Aggiorna il titolo della finestra
+        // Aggiorna il titolo della finestra
+        updateTitle("Forza 4 - Disconnesso");
 
-        gameFrame.setSize(500, 500);  // Imposta le dimensioni della finestra
-        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
-        gameFrame.setLayout(new BorderLayout());  // Imposta il layout della finestra
+        // Imposta le dimensioni della finestra
+        gameFrame.setSize(1920, 1080);
 
-        addImageToFrame(gameFrame);  // Aggiungi l'immagine al centro della finestra
+        // Imposta l'operazione di chiusura della finestra
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JLabel backgroundLabel = new JLabel();
-        gameFrame.add(backgroundLabel, BorderLayout.CENTER);
-        backgroundLabel.setLayout(new FlowLayout());
+        // Imposta il layout della finestra
+        gameFrame.setLayout(new BorderLayout());
 
-        JPanel textPanel = new JPanel();
-        textPanel.setBackground(new Color(192, 192, 192));
+        try {
+            // Carica l'immagine di sfondo
+            File imgFile = new File("images/sfondo.jpg");
+            Image backgroundImage = ImageIO.read(imgFile);
 
-        JLabel disconnectedLabel = new JLabel("L'avversario si è disconnesso.");
-        disconnectedLabel.setForeground(Color.YELLOW);
-        disconnectedLabel.setFont(new Font(disconnectedLabel.getFont().getName(), Font.PLAIN, 24));
+            // Crea un JLabel con l'immagine di sfondo
+            JLabel backgroundLabel = new JLabel(new ImageIcon(backgroundImage));
+            gameFrame.add(backgroundLabel, BorderLayout.CENTER);
+            backgroundLabel.setLayout(new FlowLayout());
 
-        textPanel.add(disconnectedLabel);
-        backgroundLabel.add(textPanel);
+            // Crea il pannello del testo
+            JPanel textPanel = new JPanel();
+            textPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+            textPanel.setOpaque(false);
+
+            // Crea la JLabel con la scritta ancora più grande e bianca
+            JLabel disconnectedLabel = new JLabel("<html><font color='white' size='9'><b>L'AVVERSARIO SI È DISCONNESSO!!</b></font></html>");
+
+            textPanel.add(disconnectedLabel);
+
+            // Aggiungi il pannello del testo al JLabel di sfondo
+            backgroundLabel.add(textPanel);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Rendi la finestra visibile
+        gameFrame.setVisible(true);
     }
 
     // Mostra la schermata di vincita/perdita
