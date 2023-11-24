@@ -1,6 +1,6 @@
 public class PlayGround {
-    public static final String COLOR_RED = "red";
-    public static final String COLOR_YELLOW = "yellow";
+    public static final String COLOR_PLAYER1 = "red";
+    public static final String COLOR_PLAYER2 = "yellow";
 
     public int columns; // Numero di colonne della griglia
     public int rows; // Numero di righe della griglia
@@ -121,11 +121,11 @@ public class PlayGround {
                     sb.append('0'); // Casella vuota
                 } 
                 // Se la posizione contiene una pedina rossa, aggiunge '1' alla stringa
-                else if (COLOR_RED.equals(pawn.color)) {
+                else if (COLOR_PLAYER1.equals(pawn.color)) {
                     sb.append('1'); // Pedina rossa
                 } 
                 // Se la posizione contiene una pedina gialla, aggiunge '2' alla stringa
-                else if (COLOR_YELLOW.equals(pawn.color)) {
+                else if (COLOR_PLAYER2.equals(pawn.color)) {
                     sb.append('2'); // Pedina gialla
                 }
     
