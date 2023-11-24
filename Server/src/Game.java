@@ -25,7 +25,6 @@ public class Game extends Thread {
         try {
             // Invia lo stato del gioco a tutti i client
             serverTCP.sendAtAll("start");
-            serverTCP.sendAtAll("refresh;" + playGround.getPawns());
         } catch (IOException e) {
             e.printStackTrace();
         }

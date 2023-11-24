@@ -64,6 +64,7 @@ public class Game {
             // Inizio Game
             case "start":
                 state = true;
+                graphic.showPlayGround(playGround.rows, playGround.columns, playGround.pawns, playerName, currentPlayerName); //Visualizza il campo da gioco
                 clientTCP.removeOldResponse();
                 break;
             // Cambia il turno del giocatore
