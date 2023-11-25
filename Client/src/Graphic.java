@@ -76,10 +76,10 @@ public class Graphic extends JFrame {
 
         // Crea un pulsante "PLAY!!" con dimensioni e stile predefiniti
         JButton btnGioca = new JButton("PLAY!!");
-        btnGioca.setPreferredSize(new Dimension(200, 50));
+        btnGioca.setPreferredSize(new Dimension(325, 80));
 
         // Imposta lo stile del testo del pulsante
-        Font buttonFont = new Font(btnGioca.getFont().getName(), Font.BOLD, 24);
+        Font buttonFont = new Font(btnGioca.getFont().getName(), Font.BOLD, 48);
         btnGioca.setFont(buttonFont);
 
         // Aggiungi un listener per gestire il clic sul pulsante
@@ -157,7 +157,7 @@ public class Graphic extends JFrame {
         JLabel waitingLabel = new JLabel("RICERCA DI UN AVVERSARIO IN CORSO");
         waitingLabel.setForeground(Color.BLUE);
         Font labelFont = waitingLabel.getFont();
-        waitingLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, 48));
+        waitingLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, 20));
 
         textAndProgressBarPanel.add(waitingLabel, BorderLayout.NORTH);
 
