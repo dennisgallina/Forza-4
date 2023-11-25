@@ -239,7 +239,7 @@ public class Graphic extends JFrame {
     }
 
     // Mostra la schermata di disconnessione
-    public static void showDisconnect(JFrame gameFrame) {
+    public void showDisconnect() {
         gameFrame.setSize(1920, 1080);
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setLayout(new BorderLayout());
