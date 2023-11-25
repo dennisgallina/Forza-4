@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -44,34 +44,41 @@ public class Graphic extends JFrame {
     public void showLobby() {
         // Ripristina la finestra
         resetFrame();  
-
+    
         // Aggiorna il titolo della finestra
         updateTitle("Forza 4 - Lobby");  
-
-        // Imposta le dimensioni della finestra a 1920x1080
-        gameFrame.setSize(1920, 1080);
-
+    
+        // Imposta le dimensioni della finestra a 800x600
+        gameFrame.setSize(800, 600);
+    
         // Imposta l'operazione di chiusura della finestra
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+    
         try {
             // Utilizziamo getClass().getResourceAsStream per ottenere un InputStream dal classpath
             InputStream stream = getClass().getResourceAsStream("/images/sfondo.jpg");
-            if (stream != null) 
-                // Imposta il contenuto della finestra con un'immagine di sfondo
-                gameFrame.setContentPane(new JLabel(new ImageIcon(ImageIO.read(stream))));
+            if (stream != null) {
+                // Leggi l'immagine dallo stream
+                BufferedImage backgroundImage = ImageIO.read(stream);
+                
+                // Ridimensiona l'immagine alla dimensione della finestra
+                Image resizedImage = backgroundImage.getScaledInstance(800, 600, Image.SCALE_SMOOTH);
+                
+                // Imposta il contenuto della finestra con l'immagine di sfondo ridimensionata
+                gameFrame.setContentPane(new JLabel(new ImageIcon(resizedImage)));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+    
         // Crea un pulsante "PLAY!!" con dimensioni e stile predefiniti
         JButton btnGioca = new JButton("PLAY!!");
-        btnGioca.setPreferredSize(new Dimension(325, 80));
-
+        btnGioca.setPreferredSize(new Dimension(150, 45));
+    
         // Imposta lo stile del testo del pulsante
-        Font buttonFont = new Font(btnGioca.getFont().getName(), Font.BOLD, 48);
+        Font buttonFont = new Font(btnGioca.getFont().getName(), Font.BOLD, 30);
         btnGioca.setFont(buttonFont);
-
+    
         // Aggiungi un listener per gestire il clic sul pulsante
         btnGioca.addActionListener(new ActionListener() {
             @Override
@@ -80,27 +87,27 @@ public class Graphic extends JFrame {
                 buttonConnectPressed = true;
             }
         });
-
+    
         // Ottieni i margini della finestra
         Insets insets = gameFrame.getInsets();
-
+    
         // Imposta i margini del pulsante
         btnGioca.setMargin(new Insets(insets.top + 10, 10, 10, 10));
-
+    
         // Imposta il layout della finestra a null
         gameFrame.setLayout(null);
-
+    
         // Posiziona il pulsante al centro orizzontalmente
         Dimension size = btnGioca.getPreferredSize();
         btnGioca.setBounds((gameFrame.getWidth() - size.width) / 2, insets.top, size.width, size.height);
-
+    
         // Aggiungi il pulsante alla finestra
         gameFrame.add(btnGioca);
-
+    
         // Crea un timer per cambiare il colore del testo del pulsante dinamicamente
         Timer colorTimer = new Timer(100, new ActionListener() {
             float hue = 0;
-
+    
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Cambia gradualmente il colore del testo
@@ -109,19 +116,20 @@ public class Graphic extends JFrame {
                 btnGioca.setForeground(newColor);
             }
         });
-
+    
         // Avvia il timer
         colorTimer.start();
-
+    
         // Ridimensiona la finestra in base ai componenti aggiunti
         gameFrame.pack();
-
+    
         // Centra la finestra sullo schermo
         gameFrame.setLocationRelativeTo(null);
-
+    
         // Rendi la finestra visibile
         gameFrame.setVisible(true);
     }
+       
 
     // Mostra la schermata di attesa con un aspetto moderno
     public void showWaitingScreen() {
@@ -231,43 +239,55 @@ public class Graphic extends JFrame {
         gameFrame.setVisible(true);
     }
 
-    // Mostra la schermata di disconnessione
+   // Mostra la schermata di disconnessione
     public void showDisconnect() {
-        gameFrame.setSize(1920, 1080);
+        // Ripristina la finestra
+        resetFrame();
+
+        // Imposta le dimensioni della finestra a 800x600
+        gameFrame.setSize(800, 600);
+        // Imposta l'operazione di chiusura della finestra
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // Imposta il layout della finestra con BorderLayout
         gameFrame.setLayout(new BorderLayout());
 
         try {
-            // Carica l'immagine di sfondo
-            File imgFile = new File("images/disconnect.jpg");
-            Image backgroundImage = ImageIO.read(imgFile);
+            // Utilizziamo getClass().getResourceAsStream per ottenere un InputStream dal classpath
+            InputStream stream = getClass().getResourceAsStream("/images/disconnect.jpg");
+            if (stream != null) {
+                // Leggi l'immagine dallo stream
+                BufferedImage backgroundImage = ImageIO.read(stream);
+                // Ridimensiona l'immagine alla dimensione della finestra
+                Image resizedImage = backgroundImage.getScaledInstance(800, 600, Image.SCALE_SMOOTH);
 
-            // Crea un JLabel con l'immagine di sfondo
-            JLabel backgroundLabel = new JLabel(new ImageIcon(backgroundImage));
-            gameFrame.add(backgroundLabel, BorderLayout.CENTER);
-            backgroundLabel.setLayout(new FlowLayout());
+                // Crea un JLabel con l'immagine di sfondo
+                JLabel backgroundLabel = new JLabel(new ImageIcon(resizedImage));
+                gameFrame.add(backgroundLabel, BorderLayout.CENTER);
+                backgroundLabel.setLayout(new FlowLayout());
 
-            // Crea il pannello del testo
-            JPanel textPanel = new JPanel();
-            textPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-            textPanel.setOpaque(false);
+                // Crea il pannello del testo
+                JPanel textPanel = new JPanel();
+                textPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+                textPanel.setOpaque(false);
 
-            // Crea la JLabel con la scritta ancora più grande e bianca
-            JLabel disconnectedLabel = new JLabel("L'AVVERSARIO SI È DISCONNESSO!!");
-            disconnectedLabel.setForeground(Color.WHITE);
-            disconnectedLabel.setFont(new Font(disconnectedLabel.getName(), Font.PLAIN, 48));
+                // Crea la JLabel con la scritta ancora più grande e bianca
+                JLabel disconnectedLabel = new JLabel("L'AVVERSARIO SI È DISCONNESSO!!");
+                disconnectedLabel.setForeground(Color.WHITE);
+                disconnectedLabel.setFont(new Font(disconnectedLabel.getName(), Font.PLAIN, 48));
 
-            textPanel.add(disconnectedLabel);
+                textPanel.add(disconnectedLabel);
 
-            // Aggiungi il pannello del testo al JLabel di sfondo
-            backgroundLabel.add(textPanel);
-
+                // Aggiungi il pannello del testo al JLabel di sfondo
+                backgroundLabel.add(textPanel);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        // Rendi la finestra visibile
         gameFrame.setVisible(true);
     }
+
 
     // Mostra la schermata di vincita/perdita
     public void showWinnerScreen(String player, String WinnerPlayer) {
@@ -278,8 +298,6 @@ public class Graphic extends JFrame {
         gameFrame.setSize(500, 500);  // Imposta le dimensioni della finestra
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
         gameFrame.setLayout(new BorderLayout());  // Imposta il layout della finestra
-
-        //addImageToFrame(gameFrame);  // Aggiungi l'immagine al centro della finestra
 
         JLabel backgroundLabel = new JLabel();
         gameFrame.add(backgroundLabel, BorderLayout.CENTER);
@@ -304,40 +322,49 @@ public class Graphic extends JFrame {
     // Mostra la schermata di fine gioco
     public void showFinishScreen() {
         // Aggiorna il titolo della finestra
-        gameFrame.setTitle("Forza 4 - Partita Terminata");
-        
-        // Imposta le dimensioni della finestra a 1920x1080
-        gameFrame.setSize(1920, 1080);
+        updateTitle("Forza 4 - Partita Terminata");
 
+        // Imposta le dimensioni della finestra a 800x600
+        gameFrame.setSize(800, 600);
         // Imposta l'operazione di chiusura della finestra
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         // Imposta il layout della finestra
         gameFrame.setLayout(new BorderLayout());
 
-        // Aggiungi l'immagine al centro della finestra
-        JLabel backgroundLabel = new JLabel();
-        gameFrame.add(backgroundLabel, BorderLayout.CENTER);
-        backgroundLabel.setLayout(new FlowLayout());
+        try {
+            // Utilizziamo getClass().getResourceAsStream per ottenere un InputStream dal classpath
+            InputStream stream = getClass().getResourceAsStream("/images/finish.jpg");
+            if (stream != null) {
+                // Leggi l'immagine dallo stream
+                BufferedImage finishImage = ImageIO.read(stream);
+                
+                // Ridimensiona l'immagine alla dimensione della finestra
+                Image resizedImage = finishImage.getScaledInstance(800, 600, Image.SCALE_SMOOTH);
 
-        // Aggiungi l'immagine
-        ImageIcon imageIcon = new ImageIcon("images/finish.jpg");  // Sostituisci con il percorso effettivo dell'immagine
-        backgroundLabel.setIcon(imageIcon);
+                // Aggiungi l'immagine al centro della finestra
+                JLabel backgroundLabel = new JLabel(new ImageIcon(resizedImage));
+                gameFrame.add(backgroundLabel, BorderLayout.CENTER);
+                backgroundLabel.setLayout(new FlowLayout());
 
-        //da scegliere cosa fare
-        /*JPanel textPanel = new JPanel();
-        textPanel.setOpaque(false);  // Imposta il pannello come trasparente
+                //da scegliere cosa fare con il testo
+                /*JPanel textPanel = new JPanel();
+                textPanel.setOpaque(false);  // Imposta il pannello come trasparente
 
-        JLabel finishLabel = new JLabel("GIOCO TERMINATO!");
-        finishLabel.setForeground(Color.WHITE);  // Imposta il colore del testo a bianco
-        finishLabel.setFont(new Font(finishLabel.getFont().getName(), Font.PLAIN, 48));  // Imposta la dimensione del testo a 72 punti
+                JLabel finishLabel = new JLabel("GIOCO TERMINATO!");
+                finishLabel.setForeground(Color.WHITE);  // Imposta il colore del testo a bianco
+                finishLabel.setFont(new Font(finishLabel.getFont().getName(), Font.PLAIN, 30));  // Imposta la dimensione del testo a 30 punti
 
-        textPanel.add(finishLabel);
-        backgroundLabel.add(textPanel);*/
+                textPanel.add(finishLabel);
+                backgroundLabel.add(textPanel);*/
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Rendi la finestra visibile
         gameFrame.setVisible(true);
     }
+
 
     // Messaggio di errore
     public void messagError() {
