@@ -23,6 +23,10 @@ public class App {
         serverTCP.send("connection accepted;Player 2", connectionPlayer2);
         
         Player player2 = new Player("Player 2", "yellow", connectionPlayer2); // Creazione del Player 2
+        // Invia "wait" al Player 2
+        serverTCP.send("wait", connectionPlayer2);
+        // Introduci una pausa 1 secondo
+        Thread.sleep(1000);
 
         Game game = new Game(serverTCP, player1, player2); // Crea un'istanza della partita
         game.start(); // Inizia la partita

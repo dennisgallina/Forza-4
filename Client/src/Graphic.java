@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Graphic extends JFrame {
     private boolean buttonConnectPressed;  // Variabile di stato per il pulsante "Connetti"
@@ -14,9 +13,6 @@ public class Graphic extends JFrame {
     public boolean buttonPawnPressed;  // Variabile di stato per il pulsante "Pedina"
     public int buttonPawnPressedY;  // Coordinata Y della pedina premuta
     public int buttonPawnPressedX;  // Coordinata X della pedina premuta
-
-    // Aggiungi l'immagine a ogni finestra
-    private ImageIcon titleIcon = new ImageIcon("images/title.png");
     private JFrame gameFrame;  // Finestra principale del gioco
 
     // Costruttore
@@ -28,12 +24,6 @@ public class Graphic extends JFrame {
         this.buttonPawnPressedX = -1;
 
         this.gameFrame = new JFrame("Forza 4");  // Inizializza la finestra principale
-    }
-
-    // Aggiungi l'immagine a ogni finestra
-    private void addImageToFrame(JFrame frame) {
-        JLabel backgroundLabel = new JLabel(titleIcon);
-        frame.add(backgroundLabel, BorderLayout.CENTER);
     }
 
     public void resetFrame() {
@@ -135,7 +125,9 @@ public class Graphic extends JFrame {
 
     // Mostra la schermata di attesa con un aspetto moderno
     public void showWaitingScreen() {
-        resetFrame();  // Ripristina la finestra
+        JPanel emptyPanel = new JPanel();
+        gameFrame.add(emptyPanel, BorderLayout.CENTER);
+        gameFrame.remove(emptyPanel);
 
         updateTitle("Forza 4 - Ricerca di un avversario");  // Aggiorna il titolo della finestra
 
@@ -144,7 +136,7 @@ public class Graphic extends JFrame {
         gameFrame.setVisible(true);  // Rende la finestra visibile
         gameFrame.setLayout(new BorderLayout());  // Imposta il layout della finestra
 
-        addImageToFrame(gameFrame);  // Aggiungi l'immagine al centro della finestra
+        //addImageToFrame(gameFrame);  // Aggiungi l'immagine al centro della finestra
 
         // Pannello principale che conterrà il testo e la barra di attesa
         JPanel contentPanel = new JPanel(new BorderLayout());
@@ -222,7 +214,7 @@ public class Graphic extends JFrame {
             }
         }
     
-        addImageToFrame(gameFrame);  // Aggiungi l'immagine al centro della finestra
+        //addImageToFrame(gameFrame);  // Aggiungi l'immagine al centro della finestra
     
         // Aggiungi un'etichetta per il nome del giocatore sopra la scacchiera
         JLabel playerNameLabel = new JLabel("Giocatore: " + playerName);
@@ -236,6 +228,7 @@ public class Graphic extends JFrame {
     
         gameFrame.pack();
         gameFrame.setLocationRelativeTo(null);
+        gameFrame.setVisible(true);
     }
 
     // Mostra la schermata di disconnessione
@@ -286,7 +279,7 @@ public class Graphic extends JFrame {
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
         gameFrame.setLayout(new BorderLayout());  // Imposta il layout della finestra
 
-        addImageToFrame(gameFrame);  // Aggiungi l'immagine al centro della finestra
+        //addImageToFrame(gameFrame);  // Aggiungi l'immagine al centro della finestra
 
         JLabel backgroundLabel = new JLabel();
         gameFrame.add(backgroundLabel, BorderLayout.CENTER);
