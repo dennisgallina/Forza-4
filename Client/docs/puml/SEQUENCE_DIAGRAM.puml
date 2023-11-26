@@ -1,0 +1,37 @@
+@startuml SEQUENCE_DIAGRAMM
+    User->Client : comando1
+    Client->Server : addContact
+    Server->DataBase : add
+    DataBase-->Server : 200,ok
+    DataBase-->Server : 400,error
+    Server-->Client : ok
+    Server-->Client : error
+    Client-->User : answer
+
+    User->Client : comando2
+    Client->Server : deleteContact
+    Server->DataBase : delete
+    DataBase-->Server : 200,ok
+    DataBase-->Server : 400,error
+    Server-->Client : ok
+    Server-->Client : error
+    Client-->User : answer
+
+    User->Client : comando3
+    Client->Server : serchContact(cognome)
+    Server->DataBase : serch(cognome)
+    DataBase-->Server : 200,ok
+    DataBase-->Server : 400,error
+    Server-->Client : ok
+    Server-->Client : error
+    Client-->User : answer
+
+    User->Client : comando4
+    Client->Server : viewHelp
+    Server->DataBase : help
+    DataBase-->Server : 200,ok
+    DataBase-->Server : 400,error
+    Server-->Client : ok
+    Server-->Client : error
+    Client-->User : answer
+@enduml

@@ -1,0 +1,47 @@
+@startuml CLASS_DIAGRAM
+    Class Client{
+        -IP
+        -Port
+        #setIP()
+        #setPort()
+        #getIP()
+        #getPort()
+        #sendComand()
+        #getAnswer()
+    }
+
+    Class Server{
+        -IP
+        -Port
+        #setIP()
+        #setPort()
+        #getIPClient()
+        #getPortClient()
+        #getComand()
+        #setDataBase(fileName)
+        #sendAnswer()
+    }
+
+    Class Contact{
+        -nome
+        -cognome
+        -dataNascita
+        -NumeroTelefono
+        #setters()
+        #getters()
+        #addContact()
+        #deleteContact()
+        #serchContact(cognome)
+        #help()
+    }
+
+    Class DataBase{
+        -fileName
+        #isDone()
+    }
+    Client-->Contact
+    Contact-->Server
+    Server-->DataBase
+    DataBase..>Server
+    Server..>Client
+@enduml

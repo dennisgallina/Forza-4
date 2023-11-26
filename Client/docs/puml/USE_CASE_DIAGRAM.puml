@@ -1,0 +1,29 @@
+@startuml USE_CASE_DIAGRAM
+  :Client: 
+  :Server:
+
+  package Contatto{
+    usecase "AddContatct" as UC1
+    usecase "DeleteContact" as UC2
+    usecase "serchContact" as UC3
+    usecase "Help" as UC4
+  }
+
+  Client-->UC1
+  Client-->UC2
+  Client-->UC3
+  Client-->UC4
+
+  UC1-->Server
+  UC2-->Server
+  UC3-->Server
+  UC4-->Server
+
+  package Database{
+    usecase "Done" as UC5
+    usecase "Error" as UC6
+  }
+
+  Server-->UC5
+  Server-->UC6
+  Database ..>Client
