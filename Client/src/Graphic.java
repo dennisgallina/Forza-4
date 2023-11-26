@@ -72,7 +72,7 @@ public class Graphic extends JFrame {
         }
     
         // Crea un pulsante "PLAY!!" con dimensioni e stile predefiniti
-        JButton btnGioca = new JButton("PLAY!!");
+        JButton btnGioca = new JButton("PLAY");
         btnGioca.setPreferredSize(new Dimension(150, 45));
     
         // Imposta lo stile del testo del pulsante
@@ -154,7 +154,7 @@ public class Graphic extends JFrame {
         textAndProgressBarPanel.setBackground(new Color(240, 240, 240));
 
         // Etichetta che indica che la ricerca di un avversario è in corso
-        JLabel waitingLabel = new JLabel("RICERCA DI UN AVVERSARIO IN CORSO...");
+        JLabel waitingLabel = new JLabel("RICERCA DI UN AVVERSARIO IN CORSO");
         waitingLabel.setForeground(Color.BLUE);
         Font labelFont = waitingLabel.getFont();
         waitingLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, 20));
@@ -225,7 +225,7 @@ public class Graphic extends JFrame {
     
         // Aggiungi un pannello per il pulsante "DISCONNETTI!!" in rosso sopra il campo da gioco
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton disconnectButton = new JButton("DISCONNETTI!!");
+        JButton disconnectButton = new JButton("DISCONNETTITI");
         disconnectButton.setForeground(Color.BLACK);
         if (playerName.equals("Player 1"))
             disconnectButton.setBackground(Color.RED);
@@ -282,7 +282,7 @@ public class Graphic extends JFrame {
         textAndProgressBarPanel.setBackground(new Color(240, 240, 240));
 
         // Etichetta che indica la disconnessione
-        JLabel disconnectLabel = new JLabel("DISCONNESSIONE IN CORSO...");
+        JLabel disconnectLabel = new JLabel("DISCONNESSIONE IN CORSO");
         disconnectLabel.setForeground(Color.BLUE);
         Font labelFont = disconnectLabel.getFont();
         disconnectLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, 20));
@@ -332,7 +332,7 @@ public class Graphic extends JFrame {
         textAndProgressBarPanel.setBackground(new Color(240, 240, 240));
 
         // Etichetta che indica la disconnessione
-        JLabel disconnectLabel = new JLabel("L'AVVERSARIO SI È DISCONNESSO, DISCONNESSIONE IN CORSO...");
+        JLabel disconnectLabel = new JLabel("L'AVVERSARIO SI È DISCONNESSO, DISCONNESSIONE IN CORSO");
         disconnectLabel.setForeground(Color.BLUE);
         Font labelFont = disconnectLabel.getFont();
         disconnectLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, 20));
@@ -382,7 +382,7 @@ public class Graphic extends JFrame {
         if (player.equals(WinnerPlayer))
         {
             try {
-                JLabel label = new JLabel("CONGRATULAZIONI, HAI VINTO!!");
+                JLabel label = new JLabel("VITTORIA");
 
                 // Esempio utilizzando le risorse del classpath
                 InputStream inputStream = getClass().getResourceAsStream("images/winner.jpg");
