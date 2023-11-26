@@ -154,7 +154,7 @@ public class Graphic extends JFrame {
         textAndProgressBarPanel.setBackground(new Color(240, 240, 240));
 
         // Etichetta che indica che la ricerca di un avversario è in corso
-        JLabel waitingLabel = new JLabel("RICERCA DI UN AVVERSARIO IN CORSO");
+        JLabel waitingLabel = new JLabel("RICERCA DI UN AVVERSARIO IN CORSO...");
         waitingLabel.setForeground(Color.BLUE);
         Font labelFont = waitingLabel.getFont();
         waitingLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, 20));
@@ -265,55 +265,106 @@ public class Graphic extends JFrame {
     }
     
 
-   // Mostra la schermata di disconnessione
+    // Mostra la schermata di disconnessione
     public void showDisconnect() {
         // Ripristina la finestra
         resetFrame();
 
-        // Imposta le dimensioni della finestra a 800x600
         gameFrame.setSize(800, 600);
-        // Imposta l'operazione di chiusura della finestra
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // Imposta il layout della finestra con BorderLayout
         gameFrame.setLayout(new BorderLayout());
 
-        try {
-            // Utilizziamo getClass().getResourceAsStream per ottenere un InputStream dal classpath
-            InputStream stream = getClass().getResourceAsStream("/images/disconnect.jpg");
-            if (stream != null) {
-                // Leggi l'immagine dallo stream
-                BufferedImage backgroundImage = ImageIO.read(stream);
-                // Ridimensiona l'immagine alla dimensione della finestra
-                Image resizedImage = backgroundImage.getScaledInstance(800, 600, Image.SCALE_SMOOTH);
+        // Pannello principale che conterrà il testo e la barra di attesa
+        JPanel contentPanel = new JPanel(new BorderLayout());
 
-                // Crea un JLabel con l'immagine di sfondo
-                JLabel backgroundLabel = new JLabel(new ImageIcon(resizedImage));
-                gameFrame.add(backgroundLabel, BorderLayout.CENTER);
-                backgroundLabel.setLayout(new FlowLayout());
+        // Pannello contenente il testo informativo e la barra di attesa
+        JPanel textAndProgressBarPanel = new JPanel(new BorderLayout());
+        textAndProgressBarPanel.setBackground(new Color(240, 240, 240));
 
-                // Crea il pannello del testo
-                JPanel textPanel = new JPanel();
-                textPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-                textPanel.setOpaque(false);
+        // Etichetta che indica la disconnessione
+        JLabel disconnectLabel = new JLabel("DISCONNESSIONE IN CORSO...");
+        disconnectLabel.setForeground(Color.BLUE);
+        Font labelFont = disconnectLabel.getFont();
+        disconnectLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, 20));
 
-                // Crea la JLabel con la scritta e bianca
-                JLabel disconnectedLabel = new JLabel("L'AVVERSARIO SI È DISCONNESSO!!");
-                disconnectedLabel.setForeground(Color.WHITE);
-                disconnectedLabel.setFont(new Font(disconnectedLabel.getName(), Font.PLAIN, 35));
+        textAndProgressBarPanel.add(disconnectLabel, BorderLayout.NORTH);
 
-                textPanel.add(disconnectedLabel);
+        // Barra di progresso indeterminata per indicare l'attesa
+        JProgressBar progressBar = new JProgressBar();
+        progressBar.setIndeterminate(true);
+        textAndProgressBarPanel.add(progressBar, BorderLayout.CENTER);
 
-                // Aggiungi il pannello del testo al JLabel di sfondo
-                backgroundLabel.add(textPanel);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // Aggiungi il pannello di testo e barra di attesa al pannello principale
+        contentPanel.add(textAndProgressBarPanel, BorderLayout.CENTER);
 
-        // Rendi la finestra visibile
+        // Imposta il pannello principale come contenuto della finestra
+        gameFrame.setContentPane(contentPanel);
+
+        gameFrame.pack();
+        gameFrame.setLocationRelativeTo(null);
         gameFrame.setVisible(true);
+
+        // Simula un ritardo per l'animazione di caricamento (rimuovi questa parte nel tuo codice reale)
+        Timer timer = new Timer(3000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Chiudi il frame dopo il ritardo simulato (rimuovi o sostituisci con la tua logica di connessione)
+                gameFrame.dispose();
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 
+    public void showEnemyDisconnected(){
+        // Ripristina la finestra
+        resetFrame();
+
+        gameFrame.setSize(800, 600);
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameFrame.setLayout(new BorderLayout());
+
+        // Pannello principale che conterrà il testo e la barra di attesa
+        JPanel contentPanel = new JPanel(new BorderLayout());
+
+        // Pannello contenente il testo informativo e la barra di attesa
+        JPanel textAndProgressBarPanel = new JPanel(new BorderLayout());
+        textAndProgressBarPanel.setBackground(new Color(240, 240, 240));
+
+        // Etichetta che indica la disconnessione
+        JLabel disconnectLabel = new JLabel("L'AVVERSARIO SI È DISCONNESSO, DISCONNESSIONE IN CORSO...");
+        disconnectLabel.setForeground(Color.BLUE);
+        Font labelFont = disconnectLabel.getFont();
+        disconnectLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, 20));
+
+        textAndProgressBarPanel.add(disconnectLabel, BorderLayout.NORTH);
+
+        // Barra di progresso indeterminata per indicare l'attesa
+        JProgressBar progressBar = new JProgressBar();
+        progressBar.setIndeterminate(true);
+        textAndProgressBarPanel.add(progressBar, BorderLayout.CENTER);
+
+        // Aggiungi il pannello di testo e barra di attesa al pannello principale
+        contentPanel.add(textAndProgressBarPanel, BorderLayout.CENTER);
+
+        // Imposta il pannello principale come contenuto della finestra
+        gameFrame.setContentPane(contentPanel);
+
+        gameFrame.pack();
+        gameFrame.setLocationRelativeTo(null);
+        gameFrame.setVisible(true);
+
+        // Simula un ritardo per l'animazione di caricamento (rimuovi questa parte nel tuo codice reale)
+        Timer timer = new Timer(3000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Chiudi il frame dopo il ritardo simulato (rimuovi o sostituisci con la tua logica di connessione)
+                gameFrame.dispose();
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
+    }
 
     // Mostra la schermata di vincita/perdita
     public void showWinnerScreen(String player, String WinnerPlayer) {

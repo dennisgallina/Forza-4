@@ -82,8 +82,8 @@ public class Game {
             // Fine Game 
             case "finish":
                 this.state = false;
+                graphic.showEnemyDisconnected();
                 clientTCP.removeOldResponse();
-                clientTCP.close();
                 break;
             // Esito vincitore, di conseguenza fine Game
             case "winner":
