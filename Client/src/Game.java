@@ -37,7 +37,7 @@ public class Game {
             if (graphic.isButtonDiconnectPressed()) {
                 state = false; // Il Game è finito
                 graphic.showDisconnect(); // Crea e visualizza la schermata di disconnessione
-                clientTCP.send(new RequestAtServer("insert")); // Invia la richiesta al Server
+                clientTCP.send(new RequestAtServer("disconnect")); // Invia la richiesta al Server
             }
 
             if (clientTCP.haveResponsesFromServer()) // Controlla ci siano risposte dal Server in coda
@@ -48,7 +48,7 @@ public class Game {
     }
 
     // Gestione della risposta da parte del Server
-    public void manageResponse() throws IOException {
+    public void manageResponse() throws IOException, InterruptedException {
         ServerResponse serverResponse = clientTCP.getOldResponse();
         // Gestione del comando ricevuto dal Server
         switch (serverResponse.command) {
@@ -64,7 +64,7 @@ public class Game {
             // Inizio Game
             case "start":
                 state = true;
-                graphic.showPlayGround(playGround.rows, playGround.columns, playGround.pawns, playerName, currentPlayerName); //Visualizza il campo da gioco
+                graphic.showPlayGround(playGround.rows, playGround.columns, playGround.pawns, playerName, currentPlayerName);
                 clientTCP.removeOldResponse();
                 break;
             // Cambia il turno del giocatore
@@ -82,8 +82,8 @@ public class Game {
             // Fine Game 
             case "finish":
                 this.state = false;
-                graphic.showFinishScreen();
                 clientTCP.removeOldResponse();
+                clientTCP.close();
                 break;
             // Esito vincitore, di conseguenza fine Game
             case "winner":

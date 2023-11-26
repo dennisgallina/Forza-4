@@ -176,13 +176,15 @@ public class Graphic extends JFrame {
         gameFrame.setLocationRelativeTo(null);
     }
 
-    // Mostra il campo da gioco
+    //metodo mostra campo da gioco
     public void showPlayGround(int rows, int columns, Pawn[][] pawns, String playerName, String currentPlayerName) {
-        resetFrame();  // Ripristina la finestra
+        // Ripristina la finestra
+        resetFrame();
     
-        updateTitle("Forza 4 - Partita");  // Aggiorna il titolo della finestra
+        // Aggiorna il titolo della finestra
+        updateTitle("Forza 4 - Partita");
     
-        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
+        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     
         char[][] board = new char[rows][columns];
         JButton[][] buttons = new JButton[rows][columns];
@@ -192,7 +194,7 @@ public class Graphic extends JFrame {
             for (int column = 0; column < columns; column++) {
                 board[row][column] = ' ';
                 buttons[row][column] = new JButton();
-
+    
                 if (pawns[row][column] != null) {
                     if (pawns[row][column].color.equals("red")) {
                         buttons[row][column].setEnabled(false);
@@ -202,18 +204,17 @@ public class Graphic extends JFrame {
                         buttons[row][column].setBackground(Color.YELLOW);
                     }
                 }
-
+    
                 buttons[row][column].setPreferredSize(new Dimension(80, 80));
                 buttons[row][column].setFont(new Font("Arial", Font.PLAIN, 40));
                 boardPanel.add(buttons[row][column]);
-
-                // Use final array to make variables effectively final
+    
                 final int[] position = {row, column};
-
-                // Aggiungi un ActionListener al bottone
+    
                 buttons[row][column].addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        // Esegui azioni in base alla pedina premuta
                         buttonPawnPressed = true;
                         buttonPawnPressedY = position[0];
                         buttonPawnPressedX = position[1];
@@ -222,14 +223,38 @@ public class Graphic extends JFrame {
             }
         }
     
-        //addImageToFrame(gameFrame);  // Aggiungi l'immagine al centro della finestra
+        // Aggiungi un pannello per il pulsante "DISCONNETTI!!" in rosso sopra il campo da gioco
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton disconnectButton = new JButton("DISCONNETTI!!");
+        disconnectButton.setForeground(Color.BLACK);
+        if (playerName.equals("Player 1"))
+            disconnectButton.setBackground(Color.RED);
+        else
+            disconnectButton.setBackground(Color.YELLOW);
+    
+        disconnectButton.setFont(new Font("Arial", Font.PLAIN, 20));  // Modifica la dimensione del font a 30
+    
+        disconnectButton.setPreferredSize(new Dimension(190, 30));  // Modifica le dimensioni del pulsante
+        disconnectButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Aggiungi azioni per la disconnessione
+                buttonDisconnectPressed = true;
+            }
+        });
+        buttonPanel.add(disconnectButton);
     
         // Aggiungi un'etichetta per il nome del giocatore sopra la scacchiera
         JLabel playerNameLabel = new JLabel("Giocatore: " + playerName);
-        playerNameLabel.setHorizontalAlignment(JLabel.CENTER);  // Allinea il testo al centro
-        gameFrame.add(playerNameLabel, BorderLayout.NORTH);
+        playerNameLabel.setHorizontalAlignment(JLabel.CENTER);
     
-        gameFrame.add(boardPanel, BorderLayout.CENTER);
+        // Aggiungi il pannello del pulsante sopra l'etichetta del giocatore
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(buttonPanel, BorderLayout.NORTH);
+        mainPanel.add(playerNameLabel, BorderLayout.CENTER);
+        mainPanel.add(boardPanel, BorderLayout.SOUTH);
+    
+        gameFrame.add(mainPanel);
     
         JLabel statusLabel = new JLabel("Turno: " + currentPlayerName);
         gameFrame.add(statusLabel, BorderLayout.SOUTH);
@@ -238,6 +263,7 @@ public class Graphic extends JFrame {
         gameFrame.setLocationRelativeTo(null);
         gameFrame.setVisible(true);
     }
+    
 
    // Mostra la schermata di disconnessione
     public void showDisconnect() {
