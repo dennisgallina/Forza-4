@@ -1,4 +1,4 @@
-# Poker Texas Hold'em con Comunicazione TCP
+# Forza 4 con Comunicazione TCP
 
 Questo progetto implementa un'applicazione dell'iconico gioco da tavolo Forza 4 che consente a due giocatori di partecipare a una partita tramite comunicazione TCP.
 
