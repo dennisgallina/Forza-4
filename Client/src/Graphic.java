@@ -56,7 +56,7 @@ public class Graphic extends JFrame {
     
         try {
             // Utilizziamo getClass().getResourceAsStream per ottenere un InputStream dal classpath
-            InputStream stream = getClass().getResourceAsStream("/images/sfondo.jpg");
+            InputStream stream = getClass().getResourceAsStream("images/sfondo.jpg");
             if (stream != null) {
                 // Leggi l'immagine dallo stream
                 BufferedImage backgroundImage = ImageIO.read(stream);
@@ -270,10 +270,10 @@ public class Graphic extends JFrame {
                 textPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
                 textPanel.setOpaque(false);
 
-                // Crea la JLabel con la scritta ancora più grande e bianca
+                // Crea la JLabel con la scritta e bianca
                 JLabel disconnectedLabel = new JLabel("L'AVVERSARIO SI È DISCONNESSO!!");
                 disconnectedLabel.setForeground(Color.WHITE);
-                disconnectedLabel.setFont(new Font(disconnectedLabel.getName(), Font.PLAIN, 48));
+                disconnectedLabel.setFont(new Font(disconnectedLabel.getName(), Font.PLAIN, 35));
 
                 textPanel.add(disconnectedLabel);
 
@@ -295,28 +295,93 @@ public class Graphic extends JFrame {
 
         updateTitle("Forza 4 - Esito Partita");  // Aggiorna il titolo della finestra
 
-        gameFrame.setSize(500, 500);  // Imposta le dimensioni della finestra
+        gameFrame.setSize(800, 600);  // Imposta le dimensioni della finestra
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // Imposta l'operazione di chiusura della finestra
         gameFrame.setLayout(new BorderLayout());  // Imposta il layout della finestra
 
-        JLabel backgroundLabel = new JLabel();
-        gameFrame.add(backgroundLabel, BorderLayout.CENTER);
-        backgroundLabel.setLayout(new FlowLayout());
-
+        CustomPanel backgroundPanel = new CustomPanel();
         JPanel textPanel = new JPanel();
-        textPanel.setBackground(new Color(192, 192, 192));
 
-        JLabel winnerLabel = new JLabel();
         if (player.equals(WinnerPlayer))
-            winnerLabel = new JLabel("HAI VINTO!");
-        else if (!player.equals(WinnerPlayer))
-            winnerLabel = new JLabel("HAI PERSO!");
-            
-        winnerLabel.setForeground(Color.YELLOW);
-        winnerLabel.setFont(new Font(winnerLabel.getFont().getName(), Font.PLAIN, 48));
+        {
+            try {
+                JLabel label = new JLabel("CONGRATULAZIONI, HAI VINTO!!");
 
-        textPanel.add(winnerLabel);
-        backgroundLabel.add(textPanel);
+                // Esempio utilizzando le risorse del classpath
+                InputStream inputStream = getClass().getResourceAsStream("images/winner.jpg");
+                Image originalImage = ImageIO.read(inputStream);
+        
+                int newWidth = gameFrame.getWidth();
+                int newHeight = gameFrame.getHeight();
+        
+                Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+                ImageIcon backgroundIcon = new ImageIcon(scaledImage);
+
+                backgroundPanel.setBI(backgroundIcon);
+                    
+                textPanel.setOpaque(false);
+
+                label.setForeground(Color.YELLOW);
+                label.setFont(new Font(label.getFont().getName(), Font.PLAIN, 35));
+
+                textPanel.add(label);
+
+                // Aggiungi l'animazione di lampeggio continuo
+                Timer flickerTimer = new Timer(500, new ActionListener() {
+                    private boolean visible = true;
+        
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        visible = !visible;
+                        label.setVisible(visible);
+                    }
+                });
+                flickerTimer.setInitialDelay(0);
+                flickerTimer.start();
+        
+                // Aggiungi l'effetto di coriandoli
+                Timer coriandoliTimer = new Timer(50, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        backgroundPanel.generateCoriandoli();
+                        backgroundPanel.updateCoriandoli();
+                        backgroundPanel.repaint();
+                    }
+                });
+                coriandoliTimer.setInitialDelay(0);
+                coriandoliTimer.start();
+            } 
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            backgroundPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
+            backgroundPanel.add(textPanel);
+
+            gameFrame.add(backgroundPanel, BorderLayout.CENTER);
+            gameFrame.setVisible(true);
+        } 
+        else if (!player.equals(WinnerPlayer)) {
+            try {
+                InputStream inputStream = getClass().getResourceAsStream("images/gameOver.jpg");
+                Image originalImage = ImageIO.read(inputStream);
+        
+                int newWidth = gameFrame.getWidth();
+                int newHeight = gameFrame.getHeight();
+        
+                Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+                ImageIcon backgroundIcon = new ImageIcon(scaledImage);
+        
+                backgroundPanel.setBI(backgroundIcon);
+                
+                backgroundPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
+                backgroundPanel.add(textPanel);
+
+                gameFrame.add(backgroundPanel, BorderLayout.CENTER);
+                gameFrame.setVisible(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     // Mostra la schermata di fine gioco
@@ -346,8 +411,8 @@ public class Graphic extends JFrame {
                 gameFrame.add(backgroundLabel, BorderLayout.CENTER);
                 backgroundLabel.setLayout(new FlowLayout());
 
-                //da scegliere cosa fare con il testo
-                /*JPanel textPanel = new JPanel();
+                
+                JPanel textPanel = new JPanel();
                 textPanel.setOpaque(false);  // Imposta il pannello come trasparente
 
                 JLabel finishLabel = new JLabel("GIOCO TERMINATO!");
@@ -355,7 +420,7 @@ public class Graphic extends JFrame {
                 finishLabel.setFont(new Font(finishLabel.getFont().getName(), Font.PLAIN, 30));  // Imposta la dimensione del testo a 30 punti
 
                 textPanel.add(finishLabel);
-                backgroundLabel.add(textPanel);*/
+                backgroundLabel.add(textPanel);
             }
         } catch (IOException e) {
             e.printStackTrace();
