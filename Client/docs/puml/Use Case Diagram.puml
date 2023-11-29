@@ -5,20 +5,23 @@ rectangle Client {
     usecase "connect" as C_UC1 #YellowGreen
     usecase "'insert;positionX'" as C_UC2 #YellowGreen
     usecase "'disconnect'" as C_UC3 #YellowGreen
-    usecase "*command inexistent" as C_UC3 #YellowGreen
+    usecase "*command inexistent" as C_UC4 #YellowGreen
 }
 
 actorUser --> C_UC1
 actorUser --> C_UC2
 actorUser --> C_UC3
+actorUser --> C_UC4
 
 rectangle Server {
     usecase "'connection accepted'/'wait'/'start'" as S_UC1 #GreenYellow
     usecase "'refresh;*pawns'/'winner;*winnerPlayer'" as S_UC2 #GreenYellow
-    usecase "'command not recognized'" as S_UC3 #GreenYellow
+    usecase "'finish'/'close'" as S_UC3 #GreenYellow
+    usecase "'command not recognized'" as S_UC4 #GreenYellow
 }
 
 C_UC1 <--> S_UC1
 C_UC2 <--> S_UC2
 C_UC3 <--> S_UC3
+C_UC4 <--> S_UC4
 @enduml

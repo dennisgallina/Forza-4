@@ -1,0 +1,24 @@
+@startuml Sequence Diagram
+    User->Client : pressConnectButton
+    Client->Server : Connection
+    Server-->Client : connectionAccepted
+    Server-->Client : wait
+    Server-->Client : start
+    Client-->User : showWaitingScreen
+    Client-->User : showPlayGround
+
+    User->Client : pressInsertPawn
+    Client->Server : insert
+    Server-->Client : updatedPlaygroung
+    Client-->User : showUpdatePlayground
+
+    User->Client : pressDisconnectButtom
+    Client->Server : disconnect
+    Server-->Client : finish
+    Client-->User : showDisconnect
+
+    User->Client : command
+    Client->Server : comandInexistent
+    Server-->Client : commandNotRecognized
+    Client-->User : commandNotRecognized
+@enduml

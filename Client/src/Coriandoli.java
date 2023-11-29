@@ -21,8 +21,8 @@ public class Coriandoli {
         y += speed;
     }
 
-    public void draw(Graphics g) {
-        g.setColor(color);
-        g.fillRect(x, y, 5, 5);
+    public void draw(Graphics graphics) {
+        graphics.setColor(color);
+        graphics.fillRect(x, y, 5, 5);
     }
 }

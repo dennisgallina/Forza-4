@@ -1,0 +1,83 @@
+@startuml Forza 4 - Server
+Class "App" {
+    +main()
+}
+
+Class "ClientRequest" {
+    +ClientRequest(request)
+    +toConsole()
+
+    +command
+    +positionX
+}
+
+Class "ConnectionsManager" {
+    +ConnectionsManager()
+    +add(socket)
+    +closeAll()
+
+    -connections
+}
+
+Class "Game" {
+    +Game(Player1, Player2)
+    +run()
+    +manageRequest(clientRequest)
+
+    +serverTCP
+    +state
+    +playGround
+    +player1
+    +player2
+    +currentPlayer
+}
+
+Class "Pawn" {
+    +Pawn(color, positionX, positionY)
+
+    +color
+    +positionX
+    +positionY
+}
+
+Class "Player" {
+    +Player(name, pawnsColor)
+    +run()
+
+    +name
+    +pawnsColor
+    +connection
+    +clientRequest
+}
+
+Class "PlayGround" {
+    +PlayGround()
+    +insert(color, positionXPawn)
+    +isColumnFull(positionX)
+    +checkWin()
+    +getNonEmptyColor(posX, posY)
+    +checkLine(startX, startY, deltaX, deltaY, length)
+    +getPawn(posX, posY)
+    +getPawns()
+
+    +COLOR_PLAYER1
+    +COLOR_PLAYER2
+    +colums
+    +rows
+    +pawns[][]
+    +columnHeigths[]
+}
+
+Class "ServerTCP" {
+    +ServerTCP(port)
+    +acceptConnection()
+    +send(message, connection)
+    +sendAtAll(message)
+    +close()
+    +getPlayer1Connection()
+    +getPlayer2Connection()
+
+    +serverSocket
+    +connectionsManager
+}
+@enduml

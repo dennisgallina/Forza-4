@@ -1,0 +1,122 @@
+@startuml Forza 4
+Class "App" {
+    +main()
+    +readServerDataFromXML(filePath)
+}
+
+Class "ClientTCP" {
+    +ClientTCP(serverIp, serverPort)
+    +run()
+    +manageDataFromServer(dataFromServer)
+    +send(requestAtServer)
+    +close()
+    +isConnected()
+    +haveResponsesFromServer()
+    +getOldResponse()
+    +removeOldResponse()
+
+    -connection
+    -serverIp
+    -serverPort
+    -input
+    -output
+    +requestAtServer
+    +serverResponse
+}
+
+Class "Coriandoli" {
+    +Coriandoli(x, y, speed, color)
+    +getY()
+    +getX()
+    +draw(graphics)
+
+    -x
+    -y
+    -speed
+    -color
+}
+
+Class "CustomPanel" {
+    +CustomPanel()
+    +setBI(backgroundImage)
+    +generateCoriandoli()
+    +updateCoriandoli()
+    +paintComponent(graphics)
+    +getRandomColor()
+
+    -backgroundIcon
+    -coriandoliList
+}
+
+Class "Game" {
+    +Game(graphic, clientTCP)
+    +run()
+    +manageResponse()
+    +insertPawns(pawns)
+
+    +clientTCP
+    +state
+    +graphic
+    +playGround
+    +playerName
+    +currentPlayerName
+}
+
+Class "Graphic" {
+    +Graphic()
+    +resetFrame()
+    +showLobby()
+    +showWaitingScreen()
+    +showPlayGround(rows, columns, pawns, playerName, currentPlayerName)
+    +showDisconnect()
+    +showEnemyDisconnected()
+    +showWinnerScreen(player, WinnerPlayer)
+    +showFinishScreen()
+    +messagError()
+    +isButtonConnectPressed()
+    +isButtonDiconnectPressed()
+    +isButtonPawnPressed()
+    +updateTitle(title)
+
+    -buttonConnectedPressed
+    -buttonDisconnectedPressed
+    +buttonPawnPressed
+    +buttonPawnPressedY
+    +buttonPawnPressedX
+    -gameFrame
+}
+
+Class "Pawn" {
+    +Pawn()
+    +Pawn(color, positionX, positionY)
+
+    +color
+    +positionX
+    +positionY
+}
+
+Class "PlayGround" {
+    +PlayGround()
+    +insert(pawn)
+
+    +colums
+    +rows
+    +pawns[][]
+}
+
+Class "RequestAtServer" {
+    +RequestAtServer(command)
+    +RequestAtServer(command, positionX)
+    +toString()
+
+    +command
+    +positionX
+}
+
+Class "ServerResponse" {
+    +ServerResponse(splittedDatFromServer)
+
+    +command
+    +description
+}
+@enduml

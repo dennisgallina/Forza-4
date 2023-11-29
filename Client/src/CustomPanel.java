@@ -11,8 +11,8 @@ public class CustomPanel extends JPanel {
         this.backgroundIcon = null;
     }
 
-    public void setBI(ImageIcon im) {
-        this.backgroundIcon = im;
+    public void setBI(ImageIcon backgroundImage) {
+        this.backgroundIcon = backgroundImage;
     }
 
     public void generateCoriandoli() {
@@ -36,11 +36,11 @@ public class CustomPanel extends JPanel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(backgroundIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
+    protected void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
+        graphics.drawImage(backgroundIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
         for (Coriandoli coriandolo : coriandoliList) {
-            coriandolo.draw(g);
+            coriandolo.draw(graphics);
         }
     }
 
