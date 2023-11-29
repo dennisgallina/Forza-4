@@ -1,6 +1,6 @@
 # Forza 4 con Comunicazione TCP
 
-Questo progetto implementa un'applicazione dell'iconico gioco da tavolo Forza 4 che consente a due giocatori di partecipare a una partita tramite comunicazione TCP.
+Questo progetto Java implementa un'applicazione dell'iconico gioco da tavolo Forza 4 che consente a due giocatori di partecipare a una partita tramite comunicazione TCP.
 
 ## Funzionalità
 
@@ -8,6 +8,11 @@ Questo progetto implementa un'applicazione dell'iconico gioco da tavolo Forza 4 
 - Gestione delle regole di Forza 4, inclusi i turni dei giocatori, l'inserimento delle pedine e la disconnessione dei giocatori.
 - Comunicazione bidirezionale tra il server e i giocatori tramite socket TCP.
 - Visualizzazione delle informazioni di gioco, come il campo da gioco e l'esito della partita.
+
+## Linguaggi e API utilizzate
+
+- Progetto sviluppato in Java;
+- Grafica realizzata con Swing.
 
 ## Struttura Repository
 
