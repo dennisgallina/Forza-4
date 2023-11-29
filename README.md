@@ -9,8 +9,15 @@ Questo progetto implementa un'applicazione dell'iconico gioco da tavolo Forza 4 
 - Comunicazione bidirezionale tra il server e i giocatori tramite socket TCP.
 - Visualizzazione delle informazioni di gioco, come il campo da gioco e l'esito della partita.
 
+## Struttura Repository
+
+- Client: contiene il progetto per eseguire il gioco dal lato del Player;
+- Docs: documentazione del progetto;
+- Server: contiene il progetto che gestisce la partita e le connessioni coi giocatori.
+
 ## Requisiti di installazione
 
+Installare le seguenti estensioni su Visual Studio Code:
 - Debugger for Java
 - Extension Pack for Java
 
