@@ -17,31 +17,25 @@ Questo progetto implementa un'applicazione dell'iconico gioco da tavolo Forza 4 
 
 ## Requisiti di installazione
 
-Installare le seguenti estensioni su Visual Studio Code:
-- Debugger for Java
-- Extension Pack for Java
+1. Scaricare e installare Visual Studio Code -> https://code.visualstudio.com/download
+
+2. Installare le seguenti estensioni su Visual Studio Code:
+- Debugger for Java;
+- Extension Pack for Java.
+
+3. Scaricare l'ultima versione di JDK -> https://www.oracle.com/it/java/technologies/downloads/
 
 ## Istruzioni per l'uso
 
-1. Clonare il repository del progetto:
+1. Clonare il repository del progetto: git clone https://github.com/dennisgallina/Forza-4.git
 
-    ```bash
-    git clone https://github.com/dennisgallina/Forza-4.git
-    ```
+2. Copiare la cartella Client e incollarla rinominandola diversamente dalla cartella originale.
 
-2. Avviare il server di gioco:
+3. Avviare il server del gioco -> Server/App.java
 
-    ```bash
-    App.java
-    ```
+4. Avviare l'applicazione client su ogni computer dei giocatori -> Client/App.java
 
-3. Avviare l'applicazione client su ogni computer dei giocatori:
-
-    ```bash
-    App.java
-    ```
-
-4. Seguire le istruzioni visualizzate sull'applicazione client per partecipare alla partita.
+5. Seguire le istruzioni visualizzate sull'applicazione client per partecipare alla partita.
 
 ## Developers
 
