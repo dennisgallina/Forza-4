@@ -17,7 +17,7 @@ Questo progetto Java implementa un'applicazione dell'iconico gioco da tavolo For
 ## Struttura Repository
 
 - Client: contiene il progetto per eseguire il gioco dal lato del Player;
-- Docs: documentazione del progetto;
+- docs: documentazione del progetto;
 - Server: contiene il progetto che gestisce la partita e le connessioni coi giocatori.
 
 ## Requisiti di installazione
