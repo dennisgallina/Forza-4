@@ -16,9 +16,9 @@ Questo progetto Java implementa un'applicazione dell'iconico gioco da tavolo For
 
 ## Struttura Repository
 
-- Client: contiene il progetto per eseguire il gioco dal lato del Player;
-- docs: documentazione del progetto;
-- Server: contiene il progetto che gestisce la partita e le connessioni coi giocatori.
+- Client: contiene il progetto Java per eseguire il gioco dal lato del Player;
+- docs: documentazione del progetto con file UML e una presentazione PowerPoint;
+- Server: contiene il progetto Java che gestisce la partita e le connessioni coi giocatori.
 
 ## Requisiti di installazione
 
@@ -36,9 +36,9 @@ Questo progetto Java implementa un'applicazione dell'iconico gioco da tavolo For
 
 2. Copiare la cartella Client e incollarla rinominandola diversamente dalla cartella originale.
 
-3. Avviare il server del gioco -> Server/App.java
+3. Avviare il server del gioco -> Server/src/App.java
 
-4. Avviare l'applicazione client su ogni computer dei giocatori -> Client/App.java
+4. Avviare l'applicazione client su ogni computer dei giocatori -> Client/src/App.java
 
 5. Seguire le istruzioni visualizzate sull'applicazione client per partecipare alla partita.
 
