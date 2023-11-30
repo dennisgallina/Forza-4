@@ -5,9 +5,9 @@ Questo progetto Java implementa un'applicazione dell'iconico gioco da tavolo For
 ## Indice
 
 1. [Funzionalità](#funzionalità)
-2. [Linguaggi e API utilizzate](#LinguaggieAPIutilizzate)
-3. [Struttura Repository](#StrutturaRepository)
-4. [Istruzioni per l'uso](#Istruzioniperl'uso)
+2. [Linguaggi e API utilizzate](#Linguaggi-e-API-utilizzate)
+3. [Struttura Repository](#Struttura-Repository)
+4. [Istruzioni per l'uso](#Istruzioni-per-l'uso)
 5. [Developers](#Developers)
 
 ## Funzionalità
